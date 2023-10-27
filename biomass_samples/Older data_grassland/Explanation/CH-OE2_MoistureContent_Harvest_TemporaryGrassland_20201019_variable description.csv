@@ -1,0 +1,11 @@
+Variable name, Description, Unit
+Harvest Sample, spot where the grass was cut, -
+Tara Bag, weight of the paper bag, g
+Wet, fresh samples including the paper bag, g
+Dry, dried samples including the paper bag, g
+Wet-Tara, fresh sample weight including paper bag minus weight of paper bag, g
+Dry-Tara, dry sample weight including paper bag minus weight of paper bag, g
+Water, water content, g
+WC, water content, %
+WC_mean_%, mean water content, %
+WC_std_%, standard deviation of mean, %
