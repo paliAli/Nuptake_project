@@ -1,0 +1,15 @@
+15 SPAD readings over the wheat plants that were later cut for biomass sampling --> 10 readings were averaged
+
+Quadrant	SPAD_averaged
+Q1	49.5
+Q1	45.3
+Q1	43.0
+Q2	46.5
+Q2	49.6
+Q2	43.5
+Q3	40.1
+Q3	45.1
+Q3	45.0
+Q4	46.1
+Q4	45.5
+Q4	45.2
