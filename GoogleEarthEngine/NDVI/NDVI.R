@@ -1,19 +1,19 @@
-library (data.table)
+library(data.table)
 library(dplyr)
 
-setwd("C:\\Users\\apavlackova\\Documents\\GoogleEarthEngine\\NDVI")
+setwd("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDVI")
 
-NDVI <- read.csv ("C:\\Users\\apavlackova\\Documents\\GoogleEarthEngine\\NDVI\\NDVI_scale10_cloud20.csv")
+NDVI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDVI\\NDVI_scale10_cloud30.csv")
 NDVI <- NDVI %>% na.omit()
 
 NDVI$system.time_start <- as.Date(NDVI$system.time_start, format = "%b %d,%Y")
 NDVI <- NDVI %>%
   rename(date = system.time_start)
 
-library(ggplot2)
-library(ggthemes)
-
 NDVI <- NDVI [which(NDVI$meanNDVI >= "0.1"), ]
+
+library(ggplot2)
+library(ggthemes) 
 
 # Timeseries plot ---------------------------------------------------------
 
