@@ -10,7 +10,7 @@ NDVI$system.time_start <- as.Date(NDVI$system.time_start, format = "%b %d,%Y")
 NDVI <- NDVI %>%
   rename(date = system.time_start)
 
-NDVI <- NDVI [which(NDVI$meanNDVI >= "0.2"), ]
+NDVI <- NDVI [which(NDVI$meanNDVI >= "0.15"), ]
 
 library(ggplot2)
 library(ggthemes) 
