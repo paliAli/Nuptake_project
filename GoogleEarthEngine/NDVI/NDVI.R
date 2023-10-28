@@ -52,8 +52,8 @@ LAI_NDVI <- LAI_NDVI %>% group_by(Date)%>%
   summarise(mean_LAI = first(mean_LAI), meanNDVI = first(meanNDVI))
 
 LAI_NDVI <- LAI_NDVI [which(LAI_NDVI$Date <= "2023-06-01"), ]
-#remove values around the cuts on 2022-05-14 and 2022-06-25
-LAI_NDVI <- LAI_NDVI [-c(5,6), ]
+#remove values around the cut on 2022-05-14 
+LAI_NDVI <- LAI_NDVI [-5, ]
 
 linear_model <- lm(mean_LAI ~ meanNDVI, data = LAI_NDVI)
 summary(linear_model)
@@ -106,7 +106,7 @@ CropHeight_NDVI <- CropHeight_NDVI %>% group_by(Date)%>%
 
 CropHeight_NDVI <- CropHeight_NDVI [which(CropHeight_NDVI$Date <= "2023-06-01"), ]
 #remove values around the cuts on 2022-05-14 and 2022-06-25
-CropHeight_NDVI <- CropHeight_NDVI [-c(5,6), ]
+CropHeight_NDVI <- CropHeight_NDVI [-5, ]
 
 linear_model <- lm(`mean_height(cm)` ~ meanNDVI, data = CropHeight_NDVI)
 summary(linear_model)
