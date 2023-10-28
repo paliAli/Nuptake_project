@@ -1,10 +1,10 @@
 library (data.table)
 library(dplyr)
 
-setwd("C:\\Users\\apavlackova\\Documents\\GoogleEarthEngine\\NDRE")
+setwd("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine")
 
-NDRE <- read.csv ("C:\\Users\\apavlackova\\Documents\\GoogleEarthEngine\\NDRE\\NDRE_scale10_cloud20.csv")
-NDRE <- NDRE %>% na.omit() %>%
+NDRE <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDRE\\NDRE_scale10_cloud50.csv")
+NDRE <- NDRE %>% na.omit()%>%
   rename(date = 'system.time_start')
 
 NDRE$date <- as.Date(NDRE$date, format = "%b %d,%Y")

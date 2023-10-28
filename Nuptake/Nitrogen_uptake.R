@@ -166,12 +166,13 @@ Nuptake_NDRE <- fuzzy_inner_join(mean_Nuptake, NDRE,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-Nuptake_NDRE <- Nuptake_NDRE [-c(3,11), ]
+Nuptake_NDRE <- Nuptake_NDRE [-c(4,13), ]
 
 Nuptake_NDRE <- Nuptake_NDRE%>%
   group_by(date.x)%>%
   summarise(mean_Nuptake = first(mean_Nuptake), meanNDRE = first(meanNDRE))
 
+Nuptake_NDRE <- Nuptake_NDRE [-5, ]
 
 linear_model <- lm(mean_Nuptake ~ meanNDRE, data = Nuptake_NDRE)
 summary(linear_model)
