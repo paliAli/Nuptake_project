@@ -1,13 +1,25 @@
-Vegetation indices
-I obtained 5 vegetation indices using Google Earth Engine using the javascript code which can be found in the folder of each vegetation index. 
+# Vegetation indices
+I obtained 5 vegetation indices <b>(NDVI, NDRE, MCARI, EVI, GNDVI)</b> using Google Earth Engine from Sentinel 2 level 2-A images using the javascript code which can be found in the folder of each vegetation index. 
+The vegetation indices values were calculated using following equations
++ NDVI = (B8 - B4)/(B8 + B4) where B8 corresponds to the NIR band and B 4 to the Red band
++ NDRE 
++ MCARI
++ EVI
++ GNDVI
+
 
 The data was downloaded as a csv file (can be found in the folder) which is named using the format "nameofvegetationindex_scalex_cloudx", where "scale" means the resolution of individual pixels and "cloud" corresponds to the maximum cloud coverage of the image. Next I uploaded the data into R studio, processed it and correlated it with LAI, Crop height and nitrogen uptake.
 The vegetation indices data is obtained in the time interval between 2021-01-24 and 2023-09-11, each dataset containing 51 values. NDVI was also obtained for each quadrant in the time interval between 2020-09-21 and 2023-06-28 
 
-5 vegetation indices (VIs): NDVI, NDRE, MCARI, EVI, GNDVI
-Each VI has its own folder containing the csv file, code for its calculation in Google Eart Engine, R files named NDVI.R, NDRE.R, MCARI.R, EVI.R and GNDVI.R, and a folder called results containing the created plots. Folders NDVI and MCARI also obtain folder called quadrants which obtains 4 csv files with the VIs values for each quadrant.
+## Available data
+Each VI has its own folder containing:
++ the csv file
++ code for its calculation in Google Eart Engine
++ R files named NDVI.R, NDRE.R, MCARI.R, EVI.R and GNDVI.R
++ a folder called results containing the created plots
++ folders NDVI and MCARI also obtain folder called quadrants which obtains 4 csv files with the VIs values for each quadrant.
 
-The structure of R files is as follows:
+# Explanation of the R code
 
 NDVI.R
 1. Upload data (the working directory and pathways have to be modified) from csv file and correct it - omit NAs, rename date column and set the values as date, remove values of NDVI lower than 0.1 because it is most likely influenced by soil reflectance or cloud cover and not a true value
