@@ -3,14 +3,14 @@ library(dplyr)
 
 setwd("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDVI")
 
-NDVI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDVI\\NDVI_scale10_cloud30.csv")
+NDVI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDVI\\NDVI_scale10_cloud50.csv")
 NDVI <- NDVI %>% na.omit()
 
 NDVI$system.time_start <- as.Date(NDVI$system.time_start, format = "%b %d,%Y")
 NDVI <- NDVI %>%
   rename(date = system.time_start)
 
-NDVI <- NDVI [which(NDVI$meanNDVI >= "0.1"), ]
+NDVI <- NDVI [which(NDVI$meanNDVI >= "0.2"), ]
 
 library(ggplot2)
 library(ggthemes) 
