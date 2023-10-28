@@ -214,13 +214,13 @@ Nuptake_MCARI <- fuzzy_inner_join(mean_Nuptake, MCARI,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-Nuptake_MCARI <- Nuptake_MCARI [-c(3,11), ]
+Nuptake_MCARI <- Nuptake_MCARI [-c(4,13), ]
 
 Nuptake_MCARI <- Nuptake_MCARI %>%   
   group_by(date.x)%>%
   summarise(mean_Nuptake = first(mean_Nuptake), meanMCARI = first(meanMCARI))
 
-
+Nuptake_MCARI <- Nuptake_MCARI [-5, ]
 
 linear_model <- lm(mean_Nuptake ~ meanMCARI, data = Nuptake_MCARI)
 summary(linear_model)

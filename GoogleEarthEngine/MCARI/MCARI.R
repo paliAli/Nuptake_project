@@ -2,11 +2,11 @@ library (data.table)
 library(dplyr)
 
 setwd("C:\\Users\\apavlackova\\Documents\\GoogleEarthEngine\\MCARI")
-MCARI <- read.csv ("C:\\Users\\apavlackova\\Documents\\GoogleEarthEngine\\MCARI\\MCARI_scale10_cloud20.csv")
+MCARI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\MCARI\\MCARI_scale10_cloud50.csv")
 MCARI <- MCARI %>% na.omit() %>%
   rename(date = 'system.time_start')
 
-MCARI$date <- as.Date(MCARI$date, format = "%m/%d/%Y")
+MCARI$date <- as.Date(MCARI$date, format = "%b %d,%Y")
 
 library(ggplot2)
 library(ggthemes)
@@ -20,12 +20,11 @@ ggplot(data = MCARI, aes(x = date, y = meanMCARI))+
        x = "Date",
        y = "MCARI",) +
   theme_minimal() +
-  scale_x_date(date_labels = "%b/%Y", date_breaks = "2 months")+
+  scale_x_date(date_labels = "%Y/%m", date_breaks = "2 months")+
   theme_minimal()+
   theme(plot.margin = margin(8, 20, 5, 5),
-        axis.text.x = element_text(size = 14, angle = 35),
+        axis.text.x = element_text(size = 11, angle = 35),
         axis.text.y = element_text(size = 14),
-        axis.title.x = element_text(margin = margin(t = 20), size = 15),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         plot.title = element_text (margin = margin (b = 20), size = 30))
 
