@@ -1,27 +1,40 @@
 var startDate = '2021-01-01';
-var endDate = '2023-09-12';
+var endDate = '2023-10-28';
 
-
-function maskS2clouds(image) {
-  var qa = image.select('QA60');
-
-  // Bits 10 and 11 are clouds and cirrus, respectively.
-  var cloudBitMask = 1 << 10;
-  var cirrusBitMask = 1 << 11;
-
-  // Both flags should be set to zero, indicating clear conditions.
-  var mask = qa.bitwiseAnd(cloudBitMask).eq(0)
-    .and(qa.bitwiseAnd(cirrusBitMask).eq(0));
-
-  return image.updateMask(mask).divide(10000).set('system:time_start', image.get('system:time_start'))
-  .set('CLOUDY_PIXEL_PERCENTAGE', image.get('CLOUDY_PIXEL_PERCENTAGE'));
-}
 
 var images = sentinel
   .filter(ee.Filter.date(startDate, endDate))
   .filterBounds(Boundaries)
-  .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 20))
-  .map(maskS2clouds);
+  .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 30))
+  .filter(ee.Filter.lt('SNOW_ICE_PERCENTAGE', 20));
+
+var scl = images.select('SCL');
+Map.addLayer (scl, {min: 1, max: 11}, 'SCL Band');
+
+
+var s2_clear_sky = function(image){
+  // 1.Locate SCL product
+  var scl = image.select('SCL');
+  
+  var cloud_shadow = scl.eq(3);
+  var cloud_low = scl.eq(7);
+  var cloud_medium = scl.eq(8);
+  var cloud_high = scl.eq(9);
+  
+  var cloud_mask = cloud_shadow.add(cloud_low).add(cloud_medium).add(cloud_high);
+  return image.updateMask(cloud_mask.not());
+  
+};
+
+var maskedImages = images.map(s2_clear_sky);
+
+// Visualize an original image
+Map.addLayer(images.first(), { bands: ['B4', 'B3', 'B2'], max: 3000 }, 'Original Image');
+
+// Visualize a masked image
+Map.addLayer(maskedImages.first(), { bands: ['B4', 'B3', 'B2'], max: 3000 }, 'Masked Image');
+
+print(maskedImages);
 
 
 var ndvi = function (image) {
@@ -29,7 +42,7 @@ var ndvi = function (image) {
   return ndv.copyProperties(image, ['system:index', 'system:time_start', 'CLOUDY_PIXEL_PERCENTAGE']);
 };
 
-var ndviCollection = images.map(ndvi);
+var ndviCollection = maskedImages.map(ndvi);
 print ('allimages', ndviCollection);
 
 // Create a daily composite with the least cloudy image per day
@@ -48,8 +61,6 @@ var dailyComposite = ee.ImageCollection.fromImages(
   })
 );
 
-
-
 var ndviCollection = dailyComposite.map(ndvi);
 print ('ndviCollection', ndviCollection);
 
@@ -63,10 +74,9 @@ var meanNDVI = ndviCollection.map(function (image) {
   return image.set('meanNDVI', meanValue); // Convert to Feature and set 'meanNDVI' property
 });
 
+
 var nd = ndviCollection.mean().clip(Boundaries);
-Map.addLayer(nd, { min: 0, max: 1, palette: ["ffffff","d2e917","6bc228","3f8d26","2c5a23"] }, 'NDVI');
-var nd = ndviCollection.mean().clip(Boundaries);
-Map.addLayer(nd, { min: 0, max: 1, palette: ["red"] }, 'NDVI');
+Map.addLayer(nd, { min: 0, max: 1, palette: ["red", "green"] }, 'NDVI');
 
 
 var chart = ui.Chart.feature.byFeature(meanNDVI, 'system:time_start', ['meanNDVI'])
