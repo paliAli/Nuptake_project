@@ -113,7 +113,7 @@ Nuptake_NDVI <- fuzzy_inner_join(mean_Nuptake, NDVI,
 
 
 #I have to manually select the dates where the date difference is lower for NDVI measured after the cut, I want to keep the NDVI from before the cut
-Nuptake_NDVI <- Nuptake_NDVI [-c(3,12), ]
+Nuptake_NDVI <- Nuptake_NDVI [-c(4,13), ]
 
 Nuptake_NDVI <- Nuptake_NDVI %>% 
     group_by(date.x)%>%
