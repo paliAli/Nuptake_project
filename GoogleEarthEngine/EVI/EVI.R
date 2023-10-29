@@ -1,14 +1,13 @@
 library (data.table)
 library(dplyr)
 
-setwd("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\EVI")
-EVI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\EVI\\EVI_scale10_cloud20.csv")
+setwd("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine")
+EVI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\EVI\\EVI_scale10_cloud50.csv")
 EVI <- EVI %>% na.omit() %>%
   rename(date = 'system.time_start')
 
 EVI$date <- as.Date(EVI$date, format = "%b %d,%Y")
 
-EVI <- EVI [which(EVI$date != "2023-02-13"), ]
 
 library(ggplot2)
 library(ggthemes)

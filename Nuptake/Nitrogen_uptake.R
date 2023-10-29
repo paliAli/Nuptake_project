@@ -263,13 +263,12 @@ Nuptake_EVI <- fuzzy_inner_join(mean_Nuptake, EVI,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-Nuptake_EVI <- Nuptake_EVI [-c(3,11), ]
+Nuptake_EVI <- Nuptake_EVI [-11, ]
 
 Nuptake_EVI <- Nuptake_EVI %>%
   group_by(date.x)%>%
   summarise(mean_Nuptake = first(mean_Nuptake), meanEVI = first(meanEVI))
 
-Nuptake_EVI <- Nuptake_EVI[-8,] #other VIs had very low values for this date -> EVI is also most likely not accurate
 
 linear_model <- lm(mean_Nuptake ~ meanEVI, data = Nuptake_EVI)
 summary(linear_model)
