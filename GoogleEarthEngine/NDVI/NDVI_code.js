@@ -5,7 +5,6 @@ var endDate = '2023-10-28';
 var images = sentinel
   .filter(ee.Filter.date(startDate, endDate))
   .filterBounds(Boundaries)
-  .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 30))
   .filter(ee.Filter.lt('SNOW_ICE_PERCENTAGE', 20));
 
 var scl = images.select('SCL');
@@ -54,7 +53,7 @@ var days = ee.List.sequence(
 
 var dailyComposite = ee.ImageCollection.fromImages(
   days.map(function (date) {
-    var dailyImages = images
+    var dailyImages = maskedImages
       .filterDate(ee.Date(date), ee.Date(date).advance(1, 'day'))
       .sort('CLOUDY_PIXEL_PERCENTAGE');
     return dailyImages.first();
