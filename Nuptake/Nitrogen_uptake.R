@@ -119,7 +119,7 @@ Nuptake_NDVI <- Nuptake_NDVI %>%
     group_by(date.x)%>%
     summarise(mean_Nuptake = first(mean_Nuptake), meanNDVI = first(meanNDVI))
 
-#remove wrong value
+#probably lower NDVI due to flowering
 Nuptake_NDVI <- Nuptake_NDVI [-5, ]
 
 # Linear N uptake vs NDVI -------------------------------------------------
