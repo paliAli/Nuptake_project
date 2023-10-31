@@ -7,9 +7,8 @@ The vegetation indices values were calculated using following equations
 + EVI = 2.5*(NIR - Red) / (NIR + 6 * Red - 7.5 * Blue + 1)
 + GNDVI = (NIR - Green)/(NIR + Green)
 
-The data was downloaded as a csv file (can be found in the folder of each vegetation index (VI) which is named using the format "nameofvegetationindex_scalex_cloudx", where "scale" means the resolution of individual pixels and "cloud" corresponds to the maximum cloud coverage of the image. Next I uploaded the data into R studio, processed it and correlated it with LAI, Crop height and nitrogen uptake.
-The vegetation indices data is obtained in the time interval between 2021-01-01 and 2023-10-28, each dataset containing 51 values. NDVI and MCARI was also obtained for each of the four quadrants in the time interval between 2020-09-21 and 2023-06-28 
-
+The data was downloaded as a csv file (can be found in the folder of each vegetation index (VI) which is named using the format "nameofvegetationindex_scalex", where "scale" means the resolution of individual pixels. Next I uploaded the data into R studio, processed it and correlated it with LAI, Crop height and nitrogen uptake.
+The vegetation indices data is obtained in the time interval between 2021-01-01 and 2023-10-28, each dataset containing 51 values. NDVI and MCARI was also obtained for each of the four quadrants.
 # Description of the Google Earth Engine Code
 
 ## Import of Data
@@ -53,6 +52,7 @@ After the cloud mask was applied, there were multiple images for some of the day
 ## Calculation of Vegetation Indices 
 The vegetation indices were calculated using their specific formulas. Next, the average value of the VI for the Boundaries area was calculated and the data was then plotted and downloaded as csv file.
 
+First, I used a different cloud masking process which I later changed because it was filtering out too many images. I kept the time-series plots, where the new ones have (2) next to their name.
 
 # Available Data
 Each VI has its own folder containing:
