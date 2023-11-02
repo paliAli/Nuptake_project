@@ -93,3 +93,7 @@ After obtaining the values of vegetation indices from the satellite images, I lo
 
 ## MCARI.R, EVI.R, GNDVI.R
 - same as NDRE
+
+# Observations
+The values for NDVI and NDRE from 14.5.2022 was not accurate, possibly because of flowering? I did not include them in the correlation
+However, for MCARI the values from Mai 2022 were improving the results of the correlation
