@@ -8,7 +8,7 @@ The vegetation indices values were calculated using following equations
 + GNDVI = (NIR - Green)/(NIR + Green)
 
 The data was downloaded as a csv file (can be found in the folder of each vegetation index (VI) which is named using the format "nameofvegetationindex_scalex", where "scale" means the resolution of individual pixels. Next I uploaded the data into R studio, processed it and correlated it with LAI, Crop height and nitrogen uptake.
-The vegetation indices data is obtained in the time interval between 2021-01-01 and 2023-10-28, each dataset containing 51 values. NDVI and MCARI was also obtained for each of the four quadrants.
+The vegetation indices data is obtained in the time interval between 2021-01-01 and 2023-10-28, each dataset containing 68 values. NDVI and MCARI was also obtained for each of the four quadrants.
 # Description of the Google Earth Engine Code
 
 ## Import of Data
@@ -96,4 +96,4 @@ After obtaining the values of vegetation indices from the satellite images, I lo
 
 # Observations
 The values for NDVI and NDRE from 14.5.2022 was not accurate, possibly because of flowering? I did not include them in the correlation
-However, for MCARI the values from Mai 2022 were improving the results of the correlation
+However, for MCARI the values from Mai 2022 were improving the results of the correlation with LAI and crop height.
