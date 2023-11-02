@@ -236,20 +236,20 @@ linear_Nuptake_MCARI_plot <- Nuptake_MCARI%>%
   geom_smooth(method = lm, se = FALSE)+
   labs(x = "MCARI", y = "", title = "MCARI vs N uptake")+
   theme_minimal()+
-  theme(axis.text.x = element_text(size = 11),
-        axis.text.y = element_text(size = 11),
-        axis.title.x = element_text(margin = margin(t = 20), size = 12),
-        axis.title.y = element_text(margin = margin(r = 20), size = 12),
-        plot.title = element_text (margin = margin (b = 20), size = 20))+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate("text",
-           x = min(Nuptake_MCARI$meanMCARI) + 0.01, 
-           y = max(Nuptake_MCARI$mean_Nuptake) - 0.5,
+           x = min(Nuptake_MCARI$meanMCARI) + 0.03, 
+           y = max(Nuptake_MCARI$mean_Nuptake) - 0.4,
            label = paste("y =", format(slope, digits = 3), 
                          "*x +", 
                          format(intercept, digits = 3),
                          "\nR2 =", round(r_squared, 2),
                          "\nCorrelation:", round(cor(Nuptake_MCARI$meanMCARI, Nuptake_MCARI$mean_Nuptake), 2)),
-           hjust = 0, vjust = 1, color = "black", size = 4)
+           hjust = 0, vjust = 1, color = "black", size = 6)
 
 linear_Nuptake_MCARI_plot
 
@@ -308,11 +308,13 @@ Nuptake_GNDVI <- fuzzy_inner_join(mean_Nuptake, GNDVI,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-Nuptake_GNDVI <- Nuptake_GNDVI [-c(3,11), ]
+Nuptake_GNDVI <- Nuptake_GNDVI [-11, ]
 
 Nuptake_GNDVI <- Nuptake_GNDVI %>%
   group_by(date.x)%>%
   summarise(mean_Nuptake = first(mean_Nuptake), meanGNDVI = first(meanGNDVI))
+
+Nuptake_GNDVI <- Nuptake_GNDVI [-5, ]
 
 linear_model <- lm(mean_Nuptake ~ meanGNDVI, data = Nuptake_GNDVI)
 summary(linear_model)
@@ -329,11 +331,11 @@ Nuptake_GNDVI%>%
   geom_smooth(method = lm, se = FALSE)+
   labs(x = "GNDVI", y = "N uptake (g/m2)", title = "GNDVI vs N uptake")+
   theme_minimal()+
-  theme(axis.text.x = element_text(size = 11),
-        axis.text.y = element_text(size = 11),
-        axis.title.x = element_text(margin = margin(t = 20), size = 12),
-        axis.title.y = element_text(margin = margin(r = 20), size = 12),
-        plot.title = element_text (margin = margin (b = 20), size = 20))+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate("text",
            x = min(Nuptake_GNDVI$meanGNDVI) + 0.01, 
            y = max(Nuptake_GNDVI$mean_Nuptake) - 0.5,
@@ -342,4 +344,4 @@ Nuptake_GNDVI%>%
                          format(intercept, digits = 2),
                          "\nR2 =", round(r_squared, 2),
                          "\nCorrelation:", round(cor(Nuptake_GNDVI$meanGNDVI, Nuptake_GNDVI$mean_Nuptake), 2)),
-           hjust = 0, vjust = 1, color = "black", size = 4)
+           hjust = 0, vjust = 1, color = "black", size = 6)
