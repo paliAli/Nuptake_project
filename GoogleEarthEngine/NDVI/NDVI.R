@@ -104,7 +104,7 @@ CropHeight_NDVI <- fuzzy_inner_join(mean_field_CropHeight, NDVI,
 
 
 CropHeight_NDVI <- CropHeight_NDVI [which(CropHeight_NDVI$Date <= "2023-06-01"), ]
-#remove values around the cuts on 2022-05-14 and 2022-06-25
+#remove values around the cuts on 2022-05-14, probably lower NDVI due to flowering
 CropHeight_NDVI <- CropHeight_NDVI [-5, ]
 
 linear_model <- lm(`mean_height(cm)` ~ meanNDVI, data = CropHeight_NDVI)
@@ -150,7 +150,7 @@ Ncontent_NDVI <- fuzzy_inner_join(mean_Nuptake, NDVI,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-Ncontent_NDVI <- Ncontent_NDVI[-11, ]
+Ncontent_NDVI <- Ncontent_NDVI[-c(9,11), ]
 
 Ncontent_NDVI <- Ncontent_NDVI%>%
   group_by(date.x)%>%
@@ -198,7 +198,7 @@ biomass_NDVI <- fuzzy_inner_join(mean_Nuptake, NDVI,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-biomass_NDVI <- biomass_NDVI [-11,]
+biomass_NDVI <- biomass_NDVI [-c(9,11),]
 
 biomass_NDVI<- biomass_NDVI %>%  
   group_by(date.x)%>%

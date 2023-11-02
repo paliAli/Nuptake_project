@@ -140,20 +140,20 @@ linear_Nuptake_NDVI_plot <- Nuptake_NDVI %>%
   geom_smooth(method = lm, se = FALSE)+
   labs(x = "NDVI", y = "N uptake (g/m2)", title = "NDVI vs N uptake")+
   theme_minimal()+
-  theme(axis.text.x = element_text(size = 11),
-        axis.text.y = element_text(size = 11),
-        axis.title.x = element_text(margin = margin(t = 20), size = 12),
-        axis.title.y = element_text(margin = margin(r = 20), size = 12),
-        plot.title = element_text (margin = margin (b = 20), size = 20))+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate("text",
-           x = min(Nuptake_NDVI$meanNDVI) + 0.05, 
-           y = max(Nuptake_NDVI$mean_Nuptake) - 0.5,
+           x = min(Nuptake_NDVI$meanNDVI) + 0.07, 
+           y = max(Nuptake_NDVI$mean_Nuptake) - 0.9,
            label = paste("y =", format(slope, digits = 2), 
                          "*x +", 
                          format(intercept, digits = 2),
                          "\nR2 =", round(r_squared, 2),
                          "\nCorrelation:", round(cor(Nuptake_NDVI$meanNDVI, Nuptake_NDVI$mean_Nuptake), 2)),
-           hjust = 0, vjust = 1, color = "black", size = 4)
+           hjust = 0, vjust = 1, color = "black", size = 6)
 
 linear_Nuptake_NDVI_plot
 
