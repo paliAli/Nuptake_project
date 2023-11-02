@@ -2,7 +2,7 @@ library (data.table)
 library(dplyr)
 
 setwd("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine")
-EVI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\EVI\\EVI_scale10_cloud50.csv")
+EVI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\EVI\\EVI_scale10.csv")
 EVI <- EVI %>% na.omit() %>%
   rename(date = 'system.time_start')
 
@@ -22,8 +22,8 @@ ggplot(data = EVI, aes(x = date, y = meanEVI))+
   theme_minimal() +
   scale_x_date(date_labels = "%b/%Y", date_breaks = "2 months")+
   theme_minimal()+
-  theme(plot.margin = margin(8, 20, 5, 5),
-        axis.text.x = element_text(size = 14, angle = 35),
+  theme(plot.margin = margin(8, 30, 5, 5),
+        axis.text.x = element_text(size = 12, angle = 35),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
@@ -40,7 +40,7 @@ mean_LAI_EVI <- fuzzy_inner_join(mean_LAI_values, EVI,
   mutate(date_difference = abs(difftime(Date, date, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-mean_LAI_EVI <- mean_LAI_EVI [-c(7,15), ]
+mean_LAI_EVI <- mean_LAI_EVI [-18, ]
 
 mean_LAI_EVI <- mean_LAI_EVI %>% group_by(Date)%>%
   summarise(mean_LAI = first(mean_LAI), meanEVI = first(meanEVI))
@@ -66,11 +66,11 @@ linear_LAI_EVI_plot <- mean_LAI_EVI %>%
   geom_smooth(method = lm, se = FALSE)+
   labs(x = "EVI", y = "LAI", title = "EVI vs LAI")+
   theme_minimal()+
-  theme(axis.text.x = element_text(size = 11),
-        axis.text.y = element_text(size = 11),
-        axis.title.x = element_text(margin = margin(t = 20), size = 12),
-        axis.title.y = element_text(margin = margin(r = 20), size = 12),
-        plot.title = element_text (margin = margin (b = 20), size = 20))+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate("text",
            x = min(mean_LAI_EVI$meanEVI) + 0.02, 
            y = max(mean_LAI_EVI$mean_LAI) - 0.3,
@@ -79,7 +79,7 @@ linear_LAI_EVI_plot <- mean_LAI_EVI %>%
                          format(intercept, digits = 2),
                          "\nR2 =", round(r_squared, 2),
                          "\nCorrelation:", round(cor(mean_LAI_EVI$meanEVI, mean_LAI_EVI$mean_LAI), 2)),
-           hjust = 0, vjust = 1, color = "black", size = 4)
+           hjust = 0, vjust = 1, color = "black", size = 6)
 
 linear_LAI_EVI_plot
 
@@ -89,14 +89,11 @@ CropHeight_EVI <- fuzzy_inner_join(mean_field_CropHeight, EVI,
                                     by = c("Date" = "date"),
                                     match_fun = function(x, y) abs(difftime(x, y, units = "days")) <= 7) %>%
   mutate(date_difference = abs(difftime(Date, date, units = "days")))%>%
-  arrange(date_difference, decreasing = FALSE)
-
-CropHeight_EVI <- CropHeight_EVI [-4, ]
-
-CropHeight_EVI <- CropHeight_EVI %>%  group_by(Date)%>%
+  arrange(date_difference, decreasing = FALSE) %>%  
+  group_by(Date)%>%
   summarise(`mean_height(cm)` = first(`mean_height(cm)`), meanEVI = first(meanEVI))
 
-CropHeight_EVI <- CropHeight_EVI [which(CropHeight_EVI$Date >= "2023-01-01"), ]
+CropHeight_EVI <- CropHeight_EVI [which(CropHeight_EVI$Date <= "2023-06-01"), ]
 
 
 linear_model <- lm(`mean_height(cm)` ~ meanEVI, data = CropHeight_EVI)
@@ -115,11 +112,11 @@ linear_CH_EVI_plot <- CropHeight_EVI %>%
   geom_smooth(method = lm, se = FALSE)+
   labs(x = "EVI", y = "Crop height (cm)", title = "EVI vs Crop height")+
   theme_minimal()+
-  theme(axis.text.x = element_text(size = 11),
-        axis.text.y = element_text(size = 11),
-        axis.title.x = element_text(margin = margin(t = 20), size = 12),
-        axis.title.y = element_text(margin = margin(r = 20), size = 12),
-        plot.title = element_text (margin = margin (b = 20), size = 20))+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate("text",
            x = min(CropHeight_EVI$meanEVI) + 0.1, 
            y = max(CropHeight_EVI$`mean_height(cm)`) - 10,
@@ -128,7 +125,7 @@ linear_CH_EVI_plot <- CropHeight_EVI %>%
                          format(intercept, digits = 2),
                          "\nR2 =", round(r_squared, 2),
                          "\nCorrelation:", round(cor(CropHeight_EVI$meanEVI, CropHeight_EVI$`mean_height(cm)`), 2)),
-           hjust = 0, vjust = 1, color = "black", size = 4)
+           hjust = 0, vjust = 1, color = "black", size = 6)
 
 linear_CH_EVI_plot
 
@@ -141,7 +138,7 @@ Ncontent_EVI <- fuzzy_inner_join(mean_Nuptake, EVI,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-Ncontent_EVI <- Ncontent_EVI[-c(3,11), ]
+Ncontent_EVI <- Ncontent_EVI[-11, ]
 
 Ncontent_EVI <- Ncontent_EVI%>%
   group_by(date.x)%>%
@@ -163,11 +160,11 @@ Ncontent_EVI_plot <- Ncontent_EVI %>%
   geom_smooth(method = lm, se = FALSE)+
   labs(x = "EVI", y = "N content (%)", title = "EVI vs N content")+
   theme_minimal()+
-  theme(axis.text.x = element_text(size = 11),
-        axis.text.y = element_text(size = 11),
-        axis.title.x = element_text(margin = margin(t = 20), size = 12),
-        axis.title.y = element_text(margin = margin(r = 20), size = 12),
-        plot.title = element_text (margin = margin (b = 20), size = 20))+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate("text",
            x = min(Ncontent_EVI$meanEVI) + 0.25, 
            y = max(Ncontent_EVI$mean_Ncontent) - 0.3,
@@ -176,7 +173,7 @@ Ncontent_EVI_plot <- Ncontent_EVI %>%
                          format(intercept, digits = 2),
                          "\nR2 =", round(r_squared, 2),
                          "\nCorrelation:", round(cor(Ncontent_EVI$meanEVI, Ncontent_EVI$mean_Ncontent), 2)),
-           hjust = 0, vjust = 1, color = "black", size = 4)
+           hjust = 0, vjust = 1, color = "black", size = 6)
 
 Ncontent_EVI_plot
 
@@ -190,7 +187,7 @@ biomass_EVI <- fuzzy_inner_join(mean_Nuptake, EVI,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-biomass_EVI <- biomass_EVI [-c(3,11),]
+biomass_EVI <- biomass_EVI [-11,]
 
 biomass_EVI<- biomass_EVI %>%  
   group_by(date.x)%>%
@@ -213,11 +210,11 @@ biomass_EVI_plot <- biomass_EVI %>%
   geom_smooth(method = lm, se = FALSE)+
   labs(x = "EVI", y = "biomass weight (g)", title = "EVI vs biomass weight")+
   theme_minimal()+
-  theme(axis.text.x = element_text(size = 11),
-        axis.text.y = element_text(size = 11),
-        axis.title.x = element_text(margin = margin(t = 20), size = 12),
-        axis.title.y = element_text(margin = margin(r = 20), size = 12),
-        plot.title = element_text (margin = margin (b = 20), size = 20))+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate("text",
            x = min(biomass_EVI$meanEVI) + 0.08, 
            y = max(biomass_EVI$biomass_weight) - 10,
@@ -226,6 +223,6 @@ biomass_EVI_plot <- biomass_EVI %>%
                          format(intercept, digits = 2),
                          "\nR2 =", round(r_squared, 2),
                          "\nCorrelation:", round(cor(biomass_EVI$meanEVI, biomass_EVI$biomass_weight), 2)),
-           hjust = 0, vjust = 1, color = "black", size = 4)
+           hjust = 0, vjust = 1, color = "black", size = 6)
 
 biomass_EVI_plot

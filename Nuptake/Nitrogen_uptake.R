@@ -284,20 +284,20 @@ Nuptake_EVI%>%
   geom_smooth(method = lm, se = FALSE)+
   labs(x = "EVI", y = "N uptake (g/m2)", title = "EVI vs N uptake")+
   theme_minimal()+
-  theme(axis.text.x = element_text(size = 11),
-        axis.text.y = element_text(size = 11),
-        axis.title.x = element_text(margin = margin(t = 20), size = 12),
-        axis.title.y = element_text(margin = margin(r = 20), size = 12),
-        plot.title = element_text (margin = margin (b = 20), size = 20))+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate("text",
-           x = min(Nuptake_EVI$meanEVI) + 0.2, 
-           y = max(Nuptake_EVI$mean_Nuptake) - 0.5,
+           x = min(Nuptake_EVI$meanEVI) + 0.08, 
+           y = max(Nuptake_EVI$mean_Nuptake) - 0.8,
            label = paste("y =", format(slope, digits = 2), 
                          "*x +", 
                          format(intercept, digits = 2),
                          "\nR2 =", round(r_squared, 2),
                          "\nCorrelation:", round(cor(Nuptake_EVI$meanEVI, Nuptake_EVI$mean_Nuptake), 2)),
-           hjust = 0, vjust = 1, color = "black", size = 4)
+           hjust = 0, vjust = 1, color = "black", size = 6)
 
 
 # GNDVI vs N uptake -------------------------------------------------------
