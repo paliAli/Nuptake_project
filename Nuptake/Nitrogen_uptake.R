@@ -146,7 +146,7 @@ linear_Nuptake_NDVI_plot <- Nuptake_NDVI %>%
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate("text",
-           x = min(Nuptake_NDVI$meanNDVI) + 0.07, 
+           x = min(Nuptake_NDVI$meanNDVI) + 0.06, 
            y = max(Nuptake_NDVI$mean_Nuptake) - 0.9,
            label = paste("y =", format(slope, digits = 2), 
                          "*x +", 
@@ -166,7 +166,7 @@ Nuptake_NDRE <- fuzzy_inner_join(mean_Nuptake, NDRE,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-Nuptake_NDRE <- Nuptake_NDRE [-c(4,13), ]
+Nuptake_NDRE <- Nuptake_NDRE [-11, ]
 
 Nuptake_NDRE <- Nuptake_NDRE%>%
   group_by(date.x)%>%
@@ -189,20 +189,20 @@ linear_Nuptake_NDRE_plot <- Nuptake_NDRE %>%
   geom_smooth(method = lm, se = FALSE)+
   labs(x = "NDRE", y = "", title = "NDRE vs N uptake")+
   theme_minimal()+
-  theme(axis.text.x = element_text(size = 11),
-        axis.text.y = element_text(size = 11),
-        axis.title.x = element_text(margin = margin(t = 20), size = 12),
-        axis.title.y = element_text(margin = margin(r = 20), size = 12),
-        plot.title = element_text (margin = margin (b = 20), size = 20))+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate("text",
-           x = min(Nuptake_NDRE$meanNDRE) + 0.01, 
+           x = min(Nuptake_NDRE$meanNDRE) + 0.03, 
            y = max(Nuptake_NDRE$mean_Nuptake) - 0.5,
            label = paste("y =", format(slope, digits = 2), 
                          "*x +", 
                          format(intercept, digits = 2),
                          "\nR2 =", round(r_squared, 2),
                          "\nCorrelation:", round(cor(Nuptake_NDRE$meanNDRE, Nuptake_NDRE$mean_Nuptake), 2)),
-           hjust = 0, vjust = 1, color = "black", size = 4)
+           hjust = 0, vjust = 1, color = "black", size = 6)
 
 linear_Nuptake_NDRE_plot
 
