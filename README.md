@@ -1,7 +1,7 @@
 # Nuptake_project
 
 # Theory
-Nitrogen is a fundamental building block for plant growth, impacting yield, quality, and overall crop performance. To provide plants with this essential element, nitrogen is introduced into the soil through N-fertilizers. However, excessive nitrogen application can lead to the accumulation of this nutrient in the soil, resulting in N2O emissions or nitrate leaching. On the other hand, insufficient nitrogen input can lead to reduced crop yield, therefore it is crucial to optimize the fertilizer application rate. Knowing the nitrogen uptake of the crop can help us adjust the N-fertilizer input. Nitrogen uptake can be measured manually using destructive methods, in which the crop samples are obtained from the field and analyzed in the lab. Even though this method is very accurate, it is difficult and time-consuming. In contrast, satellite-derived vegetation indices provide quickly and easily field-scale crop information, which could potentially enable us to measure the nitrogen uptake of the crops in real time without the need for expensive instruments. 
+Nitrogen is a fundamental building block for plant growth, impacting yield, quality, and overall crop performance. To provide plants with this essential element, nitrogen is introduced into the soil through N-fertilizers. However, excessive nitrogen application can lead to the accumulation of this nutrient in the soil, resulting in N2O emissions or nitrate leaching. On the other hand, insufficient nitrogen input can lead to reduced crop yield, therefore it is crucial to optimize the fertilizer application rate. Knowing the nitrogen uptake of the crop can help us adjust the N-fertilizer input. Nitrogen uptake can be measured manually using destructive methods, in which the crop samples are obtained from the field and analyzed in the lab. Even though this method is very accurate, it is difficult and time-consuming. In contrast, satellite-derived vegetation indices provide quickly and easily field-scale crop information, which could potentially enable us to measure the nitrogen uptake of the crops in real-time without the need for expensive instruments. 
 
 # Goal
 The main goal is to analyze the correlation between measured nitrogen uptake and vegetation indices and create a prediction model of plant nitrogen uptake.
@@ -13,10 +13,10 @@ The project was done in two parts:
 1. <b>Experimental part</b>
 2. <b>Remote sensing and data analysis</b>
 
-The site of interest is located in Oensingen, Switzerland. It is intensively managed field, which was a grassland in years 2021-2022, in year 2023 winter wheat was sown.
+The site of interest is located in Oensingen, Switzerland. It is an intensively managed field, which was a grassland in the years 2021-2022, in the year 2023 winter wheat was sown.
 
 ## Experimental part
-During this part I obtained values of dry biomass weight and nitrogen concentration, which are needed to calculate the nitrogen uptake. This is done through biomass sampling and analysis of the samples in the laboratory.
+I obtained values of dry biomass weight and nitrogen concentration, which are needed to calculate the nitrogen uptake. This is done through biomass sampling and analysis of the samples in the laboratory.
 
 ### The Process:
 + Biomass sampling
@@ -50,6 +50,7 @@ Used software:
    - Creating time-series plots
    - Correlation of VIs and LAI, crop height, dry biomass weight, N concentration, N uptake
    - Creating linear regression model
+
 In R studio I used following libraries:
 
 **data.table** Dowle M, Srinivasan A (2023). _data.table: Extension of `data.frame`_. R package version 1.14.8, <br> <https://CRAN.R-project.org/package=data.table> <br>
@@ -58,8 +59,6 @@ In R studio I used following libraries:
 **ggplot2** Wickham H (2016). _ggplot2: Elegant Graphics for Data Analysis_. Springer-Verlag New York. ISBN 978-3-319-24277-4, <br> <https://ggplot2.tidyverse.org>. <br>
 **ggthemes** Arnold J (2021). _ggthemes: Extra Themes, Scales and Geoms for 'ggplot2'_. R package version 4.2.4, <br> <https://CRAN.R-project.org/package=ggthemes>. <br>
 **GGally** Schloerke B, Cook D, Larmarange J, Briatte F, Marbach M, Thoen E, Elberg A, Crowley J (2021). _GGally: Extension to 'ggplot2'_. R package version 2.1.2, <https://CRAN.R-project.org/package=GGally>. <br>
-
-
   
 3. <b>GIS</b>
    - Creating shapefile of the field
