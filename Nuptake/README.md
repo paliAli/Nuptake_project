@@ -13,3 +13,11 @@ In this case, the dry biomass weight was also multiplied by 10, since the sample
 # Correlation of Calculated Nitrogen Uptake and VIs
 Values of each vegetation index were plotted against the measured nitrogen uptake.
 Most values of vegetation indices and nitrogen uptake were not obtained on the same day, mainly due to the limitation of satellite images which are only taken every second day and some of them were filtered out due to high cloud coverage. 
+
+First, I used mean vales for the whole field, but this resulted in only 11 data points!
+### Next steps
+- [ ] Use mean values per quadrant and plot vegetation indices against nitrogen uptake
+- [ ] Train a linear regression model
+
+# Linear regression model
+Separate the data in 70 % training data, 30 % testing data
