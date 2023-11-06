@@ -50,6 +50,16 @@ Used software:
    - Creating time-series plots
    - Correlation of VIs and LAI, crop height, dry biomass weight, N concentration, N uptake
    - Creating linear regression model
+In R studio I used following libraries:
+
+**data.table** Dowle M, Srinivasan A (2023). _data.table: Extension of `data.frame`_. R package version 1.14.8, <br> <https://CRAN.R-project.org/package=data.table> <br>
+**dplyr** Wickham H, François R, Henry L, Müller K, Vaughan D (2023). _dplyr: A Grammar of Data Manipulation_. R package version 1.1.3, <br> <https://CRAN.R-project.org/package=dplyr>. <br>
+**fuzzyjoin** Robinson D (2020). _fuzzyjoin: Join Tables Together on Inexact Matching_. R package version 0.1.6, <br> <https://CRAN.R-project.org/package=fuzzyjoin>. <br>
+**ggplot2** Wickham H (2016). _ggplot2: Elegant Graphics for Data Analysis_. Springer-Verlag New York. ISBN 978-3-319-24277-4, <br> <https://ggplot2.tidyverse.org>. <br>
+**ggthemes** Arnold J (2021). _ggthemes: Extra Themes, Scales and Geoms for 'ggplot2'_. R package version 4.2.4, <br> <https://CRAN.R-project.org/package=ggthemes>. <br>
+**GGally** Schloerke B, Cook D, Larmarange J, Briatte F, Marbach M, Thoen E, Elberg A, Crowley J (2021). _GGally: Extension to 'ggplot2'_. R package version 2.1.2, <https://CRAN.R-project.org/package=GGally>. <br>
+
+
   
 3. <b>GIS</b>
    - Creating shapefile of the field
