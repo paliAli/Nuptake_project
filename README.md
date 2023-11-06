@@ -20,7 +20,7 @@ During this part I obtained values of dry biomass weight and nitrogen concentrat
 
 ### The Process:
 + Biomass sampling
-  - the samples were taken using a grid of size 0.1 m<sup>2</sup>
+  - the samples were taken using a sampling square of size 0.1 m<sup>2</sup>
   - 3 samples were taken per quadrant
 + LAI and crop height measurements (6 per quadrant)
 + Weighing of the biomass before and after drying, obtaining the <b>dry biomass weight</b>
@@ -30,6 +30,11 @@ During this part I obtained values of dry biomass weight and nitrogen concentrat
 
 ## Remote Sensing and Analysis
 Remote sensing is the process of detecting and monitoring the physical characteristics of an area by measuring its reflected and emitted radiation at a distance, in this case from a satelite. With remote sensing, we can obtain information about the condition of the crops without any sampling and laboratory analysis.
+
+Vegetation absorbs light in the red and blue parts of the electromagnetic spectrum for photosynthesis, while it reflects light in the near-infrared (NIR) spectrum. Non-vegetated surfaces, like soil and water, have different reflectance patterns. <br>
+Plants with sufficient nitrogen content tend to have a higher chlorophyll content, which leads to increased absorption of red light and increased reflection of NIR light.
+As a result, **well-nourished plants typically have a higher NDVI** because the NIR reflectance is greater relative to the red reflectance.
+Conversely, nitrogen-deficient plants have lower chlorophyll content, causing reduced NIR reflectance compared to the red reflectance, resulting in a lower NDVI.
 
 ### Used Methods
 The programming languages used were R and javascript.
@@ -44,6 +49,7 @@ Used software:
    - Processing of the VIs values
    - Creating time-series plots
    - Correlation of VIs and LAI, crop height, dry biomass weight, N concentration, N uptake
+   - Creating linear regression model
   
 3. <b>GIS</b>
    - Creating shapefile of the field
