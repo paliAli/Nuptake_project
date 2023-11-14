@@ -1,7 +1,7 @@
 library(data.table)
 library(dplyr)
 
-setwd("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDVI")
+setwd("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine")
 
 NDVI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDVI\\NDVI_scale10.csv")
 NDVI <- NDVI %>% na.omit()
