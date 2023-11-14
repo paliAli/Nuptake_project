@@ -35,6 +35,59 @@ NDVI_plot <- ggplot(data = NDVI, aes(x = date, y = meanNDVI))+
 
 NDVI_plot
 
+# NDVI for each quadrant --------------------------------------------------
+
+# Define a function to extract quadrant number from file name
+get_quadrant <- function(filename) {
+  if (grepl("Q1", filename)) return(1)
+  if (grepl("Q2", filename)) return(2)
+  if (grepl("Q3", filename)) return(3)
+  if (grepl("Q4", filename)) return(4)
+  return(NA)
+}
+
+# Get the list of CSV files
+file_list <- list.files(path = "C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDVI\\quadrants2", pattern = "*.csv")
+
+library(purrr)
+# Read and process each file, adding the quadrant column
+NDVI_quadrants <- map_df(file_list, ~ {
+  data <- read.csv(file.path("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDVI\\quadrants2", .x))
+  quadrant <- get_quadrant(.x)
+  data$quadrant <- quadrant
+  data
+})
+
+NDVI_quadrants <- arrange(NDVI_quadrants, date)
+NDVI_quadrants <- na.omit(NDVI_quadrants)
+NDVI_quadrants <- NDVI_quadrants %>% rename(date = system.time_start)
+NDVI_quadrants$date <- as.Date(NDVI_quadrants$date, format = "%b %d,%Y")
+
+NDVI_quadrants <- NDVI_quadrants [which(NDVI_quadrants$meanNDVI >= "0.1"), ]
+
+typeof(NDVI_quadrants$quadrant)
+NDVI_quadrants$quadrant <- as.character(NDVI_quadrants$quadrant)
+
+#mean NDVI per quadrant
+NDVI_quadrants <- NDVI_quadrants %>%
+  group_by(date, quadrant) %>%
+  summarize(meanNDVI = mean(meanNDVI))%>%
+  na.omit()
+
+NDVI_quadrants$quadrant <- as.numeric(NDVI_quadrants$quadrant)
+
+NDVI_quadrants_plot <- NDVI_quadrants %>%
+  ggplot(aes(x = date, y = meanNDVI, color = quadrant))+
+  geom_line(linewidth = 1) + 
+  geom_point(size = 2, alpha = 0.6)+
+  labs(x = "Date", y = "NDVI", title = "Time series NDVI for each quadrant")+
+  theme_minimal()+
+  scale_x_date(date_labels = "%Y/%m", date_breaks = "6 months")+
+  theme(axis.title.x = element_text(margin = margin(t = 20)),
+        axis.title.y = element_text(margin = margin(r = 20)),
+        plot.title = element_text (margin = margin (b = 10), size = 15))
+
+NDVI_quadrants_plot
 
 # Plot LAI vs NDVI -----------------------------
 
