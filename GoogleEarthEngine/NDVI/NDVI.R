@@ -66,7 +66,7 @@ NDVI_quadrants$date <- as.Date(NDVI_quadrants$date, format = "%b %d,%Y")
 NDVI_quadrants <- NDVI_quadrants [which(NDVI_quadrants$meanNDVI >= "0.1"), ]
 
 typeof(NDVI_quadrants$quadrant)
-NDVI_quadrants$quadrant <- as.character(NDVI_quadrants$quadrant)
+NDVI_quadrants$quadrant <- as.numeric(NDVI_quadrants$quadrant)
 
 #mean NDVI per quadrant
 NDVI_quadrants <- NDVI_quadrants %>%
@@ -74,7 +74,6 @@ NDVI_quadrants <- NDVI_quadrants %>%
   summarize(meanNDVI = mean(meanNDVI))%>%
   na.omit()
 
-NDVI_quadrants$quadrant <- as.numeric(NDVI_quadrants$quadrant)
 
 NDVI_quadrants_plot <- NDVI_quadrants %>%
   ggplot(aes(x = date, y = meanNDVI, color = quadrant))+
