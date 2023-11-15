@@ -55,53 +55,6 @@ library(ggthemes)
 
 mean_Nuptake <- mean_Nuptake[which(mean_Nuptake$date <= "2023-06-01"),]
 
-# NDVI vs Nitrogen uptake by quadrant -------------------------------------------------
-
-mean_Nuptake_q <- nitrogen_uptake %>%
-  group_by(date, `quadrant (Q)`) %>%
-  summarize(`dry-tara` = mean(`dry-tara`), `%N corr.` = mean(`%N corr.`), mean_Nuptake = mean(Nitrogen_uptake_gperm2))%>%
-  na.omit()
-
-Nuptake_q_plot <- ggplot(mean_Nuptake_q, aes(date, mean_Nuptake, color = factor(`quadrant (Q)`), group = factor(`quadrant (Q)`))) + 
-  geom_line(linewidth = 1) + 
-  geom_point(size = 2)+
-  ggtitle("Nitrogen uptake time series") + 
-  xlab("date") + 
-  ylab("N uptake (g/m2)")+
-  theme_minimal()+
-  scale_color_manual(values = index_colors, labels = index_labels) +
-  scale_x_date(date_labels = "%b/%Y", date_breaks = "2 months") +
-  theme(axis.text.x = element_text(size = 11, angle = 35),
-        axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 20))
-
-Nuptake_q_plot
-
-merged_NDVI_nUptake <- fuzzy_inner_join(mean_Nuptake_q, NDVI_quadrants, 
-                             by = c("date" = "date"),
-                             match_fun = function(x, y) abs(difftime(x, y, units = "days")) <= 7) %>%
-  mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
-  arrange(date_difference, decreasing = FALSE)
-
-merged_NDVI_nUptake <- merged_NDVI_nUptake [-c(129:144, 241:256), ]
-
-merged_NDVI_nUptake <- merged_NDVI_nUptake %>% 
-  group_by(date.x, `quadrant (Q).x`)%>%
-  summarize(mean_Nuptake = first(mean_Nuptake), meanNDVI = first(meanNDVI))
-
-
-NDVI_nUptake_plot <- merged_NDVI_nUptake %>%
-  ggplot(aes(x = meanNDVI, y = `mean_Nuptake`, color = factor(`quadrant (Q).x`), group = factor(`quadrant (Q).x`)))+
-  geom_point()+
-  geom_line()+
-  labs(x = "NDVI", y = "Nitrogen uptake g/m2", title = "NDVI vs Nitrogen uptake for each quadrant", color = "quadrant")+
-  theme_minimal()+
-  theme(axis.title.x = element_text(margin = margin(t = 20)),
-        axis.title.y = element_text(margin = margin(r = 20)),
-        plot.title = element_text (margin = margin (b = 10), size = 15))
-
-NDVI_nUptake_plot
-
 
 # mean Nitrogen uptake vs NDVI--------------------------------
 
