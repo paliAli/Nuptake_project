@@ -31,6 +31,55 @@ ggplot(data = MCARI, aes(x = date, y = meanMCARI))+
 
 library(fuzzyjoin)
 
+library(purrr)
+
+
+# MCARI quadrants ---------------------------------------------------------
+
+# Get the list of CSV files
+file_list <- list.files(path = "C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\MCARI\\quadrants2", pattern = "*.csv")
+
+# Read and process each file, adding the quadrant column
+MCARI_quadrants <- map_df(file_list, ~ {
+  data <- read.csv(file.path("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\MCARI\\quadrants2", .x))
+  quadrant <- get_quadrant(.x)
+  data$quadrant <- quadrant
+  data
+})
+
+MCARI_quadrants <- MCARI_quadrants %>% rename(date = system.time_start)
+MCARI_quadrants <- na.omit(MCARI_quadrants)
+MCARI_quadrants$date <- as.Date(MCARI_quadrants$date, format = "%b %d,%Y")
+MCARI_quadrants <- arrange(MCARI_quadrants, date)
+
+MCARI_quadrants <- MCARI_quadrants [which(MCARI_quadrants$meanMCARI >= "0.01"), ]
+
+typeof(MCARI_quadrants$quadrant)
+MCARI_quadrants$quadrant <- as.factor(MCARI_quadrants$quadrant)
+
+#mean MCARI per quadrant
+MCARI_quadrants <- MCARI_quadrants %>%
+  group_by(date, quadrant) %>%
+  summarize(meanMCARI = mean(meanMCARI))%>%
+  na.omit()
+
+MCARI_quadrants_plot <- MCARI_quadrants %>%
+  ggplot(aes(x = date, y = meanMCARI, color = quadrant))+
+  geom_line(linewidth = 1) + 
+  geom_point(size = 2, alpha = 0.6)+
+  labs(x = "Date", y = "MCARI", title = "Time series MCARI for each quadrant")+
+  theme_minimal()+
+  scale_x_date(date_labels = "%Y/%m", date_breaks = "6 months")+
+  theme(plot.margin = margin(8, 30, 5, 5),
+        axis.text.x = element_text(size = 12, angle = 35),
+        axis.text.y = element_text(size = 14),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        axis.title.x = element_text(size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 30))+
+  scale_color_manual(values = c("red", "blue", "green", "purple")) 
+
+MCARI_quadrants_plot
+
 # MCARI vs LAI ------------------------------------------------------------
 
 library(fuzzyjoin)

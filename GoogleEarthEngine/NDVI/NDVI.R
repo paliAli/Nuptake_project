@@ -66,7 +66,7 @@ NDVI_quadrants$date <- as.Date(NDVI_quadrants$date, format = "%b %d,%Y")
 NDVI_quadrants <- NDVI_quadrants [which(NDVI_quadrants$meanNDVI >= "0.1"), ]
 
 typeof(NDVI_quadrants$quadrant)
-NDVI_quadrants$quadrant <- as.numeric(NDVI_quadrants$quadrant)
+NDVI_quadrants$quadrant <- as.factor(NDVI_quadrants$quadrant)
 
 #mean NDVI per quadrant
 NDVI_quadrants <- NDVI_quadrants %>%
@@ -81,9 +81,13 @@ NDVI_quadrants_plot <- NDVI_quadrants %>%
   labs(x = "Date", y = "NDVI", title = "Time series NDVI for each quadrant")+
   theme_minimal()+
   scale_x_date(date_labels = "%Y/%m", date_breaks = "6 months")+
-  theme(axis.title.x = element_text(margin = margin(t = 20)),
-        axis.title.y = element_text(margin = margin(r = 20)),
-        plot.title = element_text (margin = margin (b = 10), size = 15))
+  theme(plot.margin = margin(8, 30, 5, 5),
+        axis.text.x = element_text(size = 12, angle = 35),
+        axis.text.y = element_text(size = 14),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        axis.title.x = element_text(size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 30))+
+  scale_color_manual(values = c("red", "blue", "green", "purple")) 
 
 NDVI_quadrants_plot
 

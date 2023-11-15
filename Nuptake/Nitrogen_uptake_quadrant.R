@@ -1,4 +1,3 @@
-# NDVI vs Nitrogen uptake by quadrant -------------------------------------------------
 nitrogen_uptake <- nitrogen_uptake %>%
   mutate(`quadrant (Q)` = ifelse(is.na(`quadrant (Q)`), sample, `quadrant (Q)`))
 
@@ -24,7 +23,11 @@ Nuptake_q_plot <- ggplot(mean_Nuptake_q, aes(date, mean_Nuptake, color = factor(
 
 Nuptake_q_plot
 
+# NDVI vs Nitrogen uptake by quadrant -------------------------------------------------
+
 library(fuzzyjoin)
+
+NDVI_quadrants$quadrant <- as.numeric(NDVI_quadrants$quadrant)
 
 merged_NDVI_nUptake <- fuzzy_inner_join(mean_Nuptake_q, NDVI_quadrants, 
                                         by = c("date", "quadrant (Q)" = "quadrant"),
@@ -44,7 +47,7 @@ ggplot(merged_NDVI_nUptake, aes(x = meanNDVI, y = `mean_Nuptake`, group = date.x
   geom_boxplot(outlier.colour="red", outlier.size = 2)
 #outliers are from 2021-07-20 and 2021-09-02
 #removed outlier from 2021-07-20 
-merged_NDVI_nUptake <- merged_NDVI_nUptake [-7, ]
+merged_NDVI_nUptake <- merged_NDVI_nUptake [-c(7,10), ]
 
 # Linear N uptake vs NDVI per quadrant -------------------------------------------------
 
@@ -78,3 +81,221 @@ merged_NDVI_nUptake %>%
                          "\nR2 =", round(r_squared, 2),
                          "\nCorrelation:", round(cor(merged_NDVI_nUptake$meanNDVI, merged_NDVI_nUptake$mean_Nuptake), 2)),
            hjust = 0, vjust = 1, color = "black", size = 6)
+
+
+# NDRE vs Nuptake per quadrant --------------------------------------------
+NDRE_quadrants$quadrant <- as.numeric(NDRE_quadrants$quadrant)
+
+merged_NDRE_nUptake <- fuzzy_inner_join(mean_Nuptake_q, NDRE_quadrants, 
+                                        by = c("date", "quadrant (Q)" = "quadrant"),
+                                        match_fun = function(x, y) abs(difftime(x, y, units = "days")) <= 7)%>%
+  mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
+  arrange(date_difference, decreasing = FALSE)%>%
+  filter(`quadrant (Q)` == quadrant)
+
+merged_NDRE_nUptake <- merged_NDRE_nUptake [-c(41:44), ]
+
+merged_NDRE_nUptake <- merged_NDRE_nUptake %>% 
+  group_by(date.x, `quadrant (Q)`)%>%
+  summarize(mean_Nuptake = first(mean_Nuptake), meanNDRE = first(meanNDRE))
+
+#Find outliers
+ggplot(merged_NDVI_nUptake, aes(x = meanNDVI, y = `mean_Nuptake`, group = date.x))+
+  geom_boxplot(outlier.colour="red", outlier.size = 2)
+
+
+# Linear N uptake vs NDRE per quadrant -------------------------------------------------
+
+linear_model <- lm(mean_Nuptake ~ meanNDRE, data = merged_NDRE_nUptake)
+summary(linear_model)
+
+linear_coef <- coef(linear_model)
+intercept <- linear_coef[1]
+slope <- linear_coef[2]
+
+r_squared <- 1 - sum(residuals(linear_model)^2) / sum((merged_NDRE_nUptake$mean_Nuptake - mean(merged_NDRE_nUptake$mean_Nuptake))^2)
+
+
+merged_NDRE_nUptake %>%
+  ggplot(aes(x = meanNDRE, y = mean_Nuptake))+
+  geom_point()+
+  geom_smooth(method = lm, se = FALSE)+
+  labs(x = "NDRE", y = "N uptake (g/m2)", title = "NDRE vs N uptake")+
+  theme_minimal()+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22))+
+  annotate("text",
+           x = min(merged_NDRE_nUptake$meanNDRE) + 0.06, 
+           y = max(merged_NDRE_nUptake$mean_Nuptake) - 0.9,
+           label = paste("y =", format(slope, digits = 2), 
+                         "*x +", 
+                         format(intercept, digits = 2),
+                         "\nR2 =", round(r_squared, 2),
+                         "\nCorrelation:", round(cor(merged_NDRE_nUptake$meanNDRE, merged_NDRE_nUptake$mean_Nuptake), 2)),
+           hjust = 0, vjust = 1, color = "black", size = 6)
+
+# MCARI vs Nuptake per quadrant --------------------------------------------
+MCARI_quadrants$quadrant <- as.numeric(MCARI_quadrants$quadrant)
+
+merged_MCARI_nUptake <- fuzzy_inner_join(mean_Nuptake_q, MCARI_quadrants, 
+                                        by = c("date", "quadrant (Q)" = "quadrant"),
+                                        match_fun = function(x, y) abs(difftime(x, y, units = "days")) <= 7)%>%
+  mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
+  arrange(date_difference, decreasing = FALSE)%>%
+  filter(`quadrant (Q)` == quadrant)
+
+merged_MCARI_nUptake <- merged_MCARI_nUptake [-c(41:44), ]
+
+merged_MCARI_nUptake <- merged_MCARI_nUptake %>% 
+  group_by(date.x, `quadrant (Q)`)%>%
+  summarize(mean_Nuptake = first(mean_Nuptake), meanMCARI = first(meanMCARI))
+
+#Find outliers
+ggplot(merged_MCARI_nUptake, aes(x = meanMCARI, y = `mean_Nuptake`, group = date.x))+
+  geom_boxplot(outlier.colour="red", outlier.size = 2)
+
+# Linear N uptake vs NDRE per quadrant -------------------------------------------------
+
+linear_model <- lm(mean_Nuptake ~ meanMCARI, data = merged_MCARI_nUptake)
+summary(linear_model)
+
+linear_coef <- coef(linear_model)
+intercept <- linear_coef[1]
+slope <- linear_coef[2]
+
+r_squared <- 1 - sum(residuals(linear_model)^2) / sum((merged_MCARI_nUptake$mean_Nuptake - mean(merged_MCARI_nUptake$mean_Nuptake))^2)
+
+
+merged_MCARI_nUptake %>%
+  ggplot(aes(x = meanMCARI, y = mean_Nuptake))+
+  geom_point()+
+  geom_smooth(method = lm, se = FALSE)+
+  labs(x = "MCARI", y = "N uptake (g/m2)", title = "MCARI vs N uptake")+
+  theme_minimal()+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22))+
+  annotate("text",
+           x = min(merged_MCARI_nUptake$meanMCARI) + 0.06, 
+           y = max(merged_MCARI_nUptake$mean_Nuptake) - 0.9,
+           label = paste("y =", format(slope, digits = 2), 
+                         "*x +", 
+                         format(intercept, digits = 2),
+                         "\nR2 =", round(r_squared, 2),
+                         "\nCorrelation:", round(cor(merged_MCARI_nUptake$meanMCARI, merged_MCARI_nUptake$mean_Nuptake), 2)),
+           hjust = 0, vjust = 1, color = "black", size = 6)
+
+# GNDVI vs Nuptake per quadrant --------------------------------------------
+GNDVI_quadrants$quadrant <- as.numeric(GNDVI_quadrants$quadrant)
+
+merged_GNDVI_nUptake <- fuzzy_inner_join(mean_Nuptake_q, GNDVI_quadrants, 
+                                         by = c("date", "quadrant (Q)" = "quadrant"),
+                                         match_fun = function(x, y) abs(difftime(x, y, units = "days")) <= 7)%>%
+  mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
+  arrange(date_difference, decreasing = FALSE)%>%
+  filter(`quadrant (Q)` == quadrant)
+
+merged_GNDVI_nUptake <- merged_GNDVI_nUptake [-c(41:44), ]
+
+merged_GNDVI_nUptake <- merged_GNDVI_nUptake %>% 
+  group_by(date.x, `quadrant (Q)`)%>%
+  summarize(mean_Nuptake = first(mean_Nuptake), meanGNDVI = first(meanGNDVI))
+
+#Find outliers
+ggplot(merged_GNDVI_nUptake, aes(x = meanGNDVI, y = `mean_Nuptake`, group = date.x))+
+  geom_boxplot(outlier.colour="red", outlier.size = 2)
+
+
+# Linear N uptake vs NDRE per quadrant -------------------------------------------------
+
+linear_model <- lm(mean_Nuptake ~ meanGNDVI, data = merged_GNDVI_nUptake)
+summary(linear_model)
+
+linear_coef <- coef(linear_model)
+intercept <- linear_coef[1]
+slope <- linear_coef[2]
+
+r_squared <- 1 - sum(residuals(linear_model)^2) / sum((merged_GNDVI_nUptake$mean_Nuptake - mean(merged_GNDVI_nUptake$mean_Nuptake))^2)
+
+
+merged_GNDVI_nUptake %>%
+  ggplot(aes(x = meanGNDVI, y = mean_Nuptake))+
+  geom_point()+
+  geom_smooth(method = lm, se = FALSE)+
+  labs(x = "GNDVI", y = "N uptake (g/m2)", title = "GNDVI vs N uptake")+
+  theme_minimal()+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22))+
+  annotate("text",
+           x = min(merged_GNDVI_nUptake$meanGNDVI) + 0.06, 
+           y = max(merged_GNDVI_nUptake$mean_Nuptake) - 0.9,
+           label = paste("y =", format(slope, digits = 2), 
+                         "*x +", 
+                         format(intercept, digits = 2),
+                         "\nR2 =", round(r_squared, 2),
+                         "\nCorrelation:", round(cor(merged_GNDVI_nUptake$meanGNDVI, merged_GNDVI_nUptake$mean_Nuptake), 2)),
+           hjust = 0, vjust = 1, color = "black", size = 6)
+
+# EVI vs Nuptake per quadrant --------------------------------------------
+EVI_quadrants$quadrant <- as.numeric(EVI_quadrants$quadrant)
+
+merged_EVI_nUptake <- fuzzy_inner_join(mean_Nuptake_q, EVI_quadrants, 
+                                         by = c("date", "quadrant (Q)" = "quadrant"),
+                                         match_fun = function(x, y) abs(difftime(x, y, units = "days")) <= 7)%>%
+  mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
+  arrange(date_difference, decreasing = FALSE)%>%
+  filter(`quadrant (Q)` == quadrant)
+
+merged_EVI_nUptake <- merged_EVI_nUptake [-c(41:44), ]
+
+merged_EVI_nUptake <- merged_EVI_nUptake %>% 
+  group_by(date.x, `quadrant (Q)`)%>%
+  summarize(mean_Nuptake = first(mean_Nuptake), meanEVI = first(meanEVI))
+
+#Find outliers
+ggplot(merged_EVI_nUptake, aes(x = meanEVI, y = `mean_Nuptake`, group = date.x))+
+  geom_boxplot(outlier.colour="red", outlier.size = 2)
+
+merged_EVI_nUptake <- merged_EVI_nUptake [-c(7,10), ]
+
+# Linear N uptake vs NDRE per quadrant -------------------------------------------------
+
+linear_model <- lm(mean_Nuptake ~ meanEVI, data = merged_EVI_nUptake)
+summary(linear_model)
+
+linear_coef <- coef(linear_model)
+intercept <- linear_coef[1]
+slope <- linear_coef[2]
+
+r_squared <- 1 - sum(residuals(linear_model)^2) / sum((merged_EVI_nUptake$mean_Nuptake - mean(merged_EVI_nUptake$mean_Nuptake))^2)
+
+
+merged_EVI_nUptake %>%
+  ggplot(aes(x = meanEVI, y = mean_Nuptake))+
+  geom_point()+
+  geom_smooth(method = lm, se = FALSE)+
+  labs(x = "EVI", y = "N uptake (g/m2)", title = "EVI vs N uptake")+
+  theme_minimal()+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22))+
+  annotate("text",
+           x = min(merged_EVI_nUptake$meanEVI) + 0.06, 
+           y = max(merged_EVI_nUptake$mean_Nuptake) - 0.9,
+           label = paste("y =", format(slope, digits = 2), 
+                         "*x +", 
+                         format(intercept, digits = 2),
+                         "\nR2 =", round(r_squared, 2),
+                         "\nCorrelation:", round(cor(merged_EVI_nUptake$meanEVI, merged_EVI_nUptake$mean_Nuptake), 2)),
+           hjust = 0, vjust = 1, color = "black", size = 6)
+

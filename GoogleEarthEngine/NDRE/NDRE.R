@@ -35,6 +35,53 @@ NDRE_plot <- ggplot(data = NDRE, aes(x = date, y = meanNDRE))+
 
 NDRE_plot
 
+# NDRE for each quadrant --------------------------------------------------
+library(purrr)
+
+# Get the list of CSV files
+file_list <- list.files(path = "C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDRE\\quadrants", pattern = "*.csv")
+
+# Read and process each file, adding the quadrant column
+NDRE_quadrants <- map_df(file_list, ~ {
+  data <- read.csv(file.path("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDRE\\quadrants", .x))
+  quadrant <- get_quadrant(.x)
+  data$quadrant <- quadrant
+  data
+})
+
+NDRE_quadrants <- NDRE_quadrants %>% rename(date = system.time_start)
+NDRE_quadrants <- na.omit(NDRE_quadrants)
+NDRE_quadrants$date <- as.Date(NDRE_quadrants$date, format = "%b %d,%Y")
+NDRE_quadrants <- arrange(NDRE_quadrants, date)
+
+NDRE_quadrants <- NDRE_quadrants [which(NDRE_quadrants$meanNDRE >= "0.1"), ]
+
+typeof(NDRE_quadrants$quadrant)
+NDRE_quadrants$quadrant <- as.factor(NDRE_quadrants$quadrant)
+
+#mean NDRE per quadrant
+NDRE_quadrants <- NDRE_quadrants %>%
+  group_by(date, quadrant) %>%
+  summarize(meanNDRE = mean(meanNDRE))%>%
+  na.omit()
+
+NDRE_quadrants_plot <- NDRE_quadrants %>%
+  ggplot(aes(x = date, y = meanNDRE, color = quadrant))+
+  geom_line(linewidth = 1) + 
+  geom_point(size = 2, alpha = 0.6)+
+  labs(x = "Date", y = "NDRE", title = "Time series NDRE for each quadrant")+
+  theme_minimal()+
+  scale_x_date(date_labels = "%Y/%m", date_breaks = "6 months")+
+  theme(plot.margin = margin(8, 30, 5, 5),
+        axis.text.x = element_text(size = 12, angle = 35),
+        axis.text.y = element_text(size = 14),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        axis.title.x = element_text(size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 30))+
+  scale_color_manual(values = c("red", "blue", "green", "purple")) 
+
+NDRE_quadrants_plot
+
 # NDRE vs LAI -------------------------------------------------------------
 library(fuzzyjoin)
 

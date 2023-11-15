@@ -31,6 +31,53 @@ ggplot(data = GNDVI, aes(x = date, y = meanGNDVI))+
         plot.title = element_text (margin = margin (b = 20), size = 30))
 
 
+# GNDVI for each quadrant --------------------------------------------------
+library(purrr)
+
+# Get the list of CSV files
+file_list <- list.files(path = "C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\GNDVI\\quadrants", pattern = "*.csv")
+
+# Read and process each file, adding the quadrant column
+GNDVI_quadrants <- map_df(file_list, ~ {
+  data <- read.csv(file.path("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\GNDVI\\quadrants", .x))
+  quadrant <- get_quadrant(.x)
+  data$quadrant <- quadrant
+  data
+})
+
+GNDVI_quadrants <- GNDVI_quadrants %>% rename(date = system.time_start)
+GNDVI_quadrants <- na.omit(GNDVI_quadrants)
+GNDVI_quadrants$date <- as.Date(GNDVI_quadrants$date, format = "%b %d,%Y")
+GNDVI_quadrants <- arrange(GNDVI_quadrants, date)
+
+GNDVI_quadrants <- GNDVI_quadrants [which(GNDVI_quadrants$meanGNDVI >= "0.1"), ]
+
+typeof(GNDVI_quadrants$quadrant)
+GNDVI_quadrants$quadrant <- as.factor(GNDVI_quadrants$quadrant)
+
+#mean NDRE per quadrant
+GNDVI_quadrants <- GNDVI_quadrants %>%
+  group_by(date, quadrant) %>%
+  summarize(meanGNDVI = mean(meanGNDVI))%>%
+  na.omit()
+
+GNDVI_quadrants_plot <- GNDVI_quadrants %>%
+  ggplot(aes(x = date, y = meanGNDVI, color = quadrant))+
+  geom_line(linewidth = 1) + 
+  geom_point(size = 2, alpha = 0.6)+
+  labs(x = "Date", y = "GNDVI", title = "Time series GNDVI for each quadrant")+
+  theme_minimal()+
+  scale_x_date(date_labels = "%Y/%m", date_breaks = "6 months")+
+  theme(plot.margin = margin(8, 30, 5, 5),
+        axis.text.x = element_text(size = 12, angle = 35),
+        axis.text.y = element_text(size = 14),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        axis.title.x = element_text(size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 30))+
+  scale_color_manual(values = c("red", "blue", "green", "purple")) 
+
+GNDVI_quadrants_plot
+
 #GNDVI vs LAI -------------------------------------------------------------
 
 library(fuzzyjoin)

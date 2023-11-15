@@ -29,6 +29,52 @@ ggplot(data = EVI, aes(x = date, y = meanEVI))+
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         plot.title = element_text (margin = margin (b = 20), size = 30))
 
+# EVI for each quadrant --------------------------------------------------
+library(purrr)
+
+# Get the list of CSV files
+file_list <- list.files(path = "C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\EVI\\quadrants", pattern = "*.csv")
+
+# Read and process each file, adding the quadrant column
+EVI_quadrants <- map_df(file_list, ~ {
+  data <- read.csv(file.path("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\EVI\\quadrants", .x))
+  quadrant <- get_quadrant(.x)
+  data$quadrant <- quadrant
+  data
+})
+
+EVI_quadrants <- EVI_quadrants %>% rename(date = system.time_start)
+EVI_quadrants <- na.omit(EVI_quadrants)
+EVI_quadrants$date <- as.Date(EVI_quadrants$date, format = "%b %d,%Y")
+EVI_quadrants <- arrange(EVI_quadrants, date)
+
+EVI_quadrants <- EVI_quadrants [which(EVI_quadrants$meanEVI >= "0.1"), ]
+
+typeof(EVI_quadrants$quadrant)
+EVI_quadrants$quadrant <- as.factor(EVI_quadrants$quadrant)
+
+#mean NDRE per quadrant
+EVI_quadrants <- EVI_quadrants %>%
+  group_by(date, quadrant) %>%
+  summarize(meanEVI = mean(meanEVI))%>%
+  na.omit()
+
+EVI_quadrants_plot <- EVI_quadrants %>%
+  ggplot(aes(x = date, y = meanEVI, color = quadrant))+
+  geom_line(linewidth = 1) + 
+  geom_point(size = 2, alpha = 0.6)+
+  labs(x = "Date", y = "EVI", title = "Time series EVI for each quadrant")+
+  theme_minimal()+
+  scale_x_date(date_labels = "%Y/%m", date_breaks = "6 months")+
+  theme(plot.margin = margin(8, 30, 5, 5),
+        axis.text.x = element_text(size = 12, angle = 35),
+        axis.text.y = element_text(size = 14),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        axis.title.x = element_text(size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 30))+
+  scale_color_manual(values = c("red", "blue", "green", "purple")) 
+
+EVI_quadrants_plot
 
 # EVI vs LAI -------------------------------------------------------------
 
