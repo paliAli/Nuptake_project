@@ -16,7 +16,7 @@ Most values of vegetation indices and nitrogen uptake were not obtained on the s
 
 First, I used mean vales for the whole field, but this resulted in only 11 data points!
 ### Next steps
-- [ ] Use mean values per quadrant and plot vegetation indices against nitrogen uptake
+- [x] Use mean values per quadrant and plot vegetation indices against nitrogen uptake
 - [ ] Train a linear regression model
 
 # Linear regression model
