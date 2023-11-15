@@ -35,6 +35,46 @@ NDVI_plot <- ggplot(data = NDVI, aes(x = date, y = meanNDVI))+
 
 NDVI_plot
 
+# NDVI for each quadrant --------------------------------------------------
+
+# Define a function to extract quadrant number from file name
+get_quadrant <- function(filename) {
+  if (grepl("Q1", filename)) return(1)
+  if (grepl("Q2", filename)) return(2)
+  if (grepl("Q3", filename)) return(3)
+  if (grepl("Q4", filename)) return(4)
+  return(NA)
+}
+
+# Get the list of CSV files
+file_list <- list.files(path = "C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDVI\\quadrants2", pattern = "*.csv")
+
+library(purrr)
+# Read and process each file, adding the quadrant column
+NDVI_quadrants <- map_df(file_list, ~ {
+  data <- read.csv(file.path("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDVI\\quadrants2", .x))
+  quadrant <- get_quadrant(.x)
+  data$quadrant <- quadrant
+  data
+})
+
+NDVI_quadrants <- arrange(NDVI_quadrants, date)
+NDVI_quadrants <- na.omit(NDVI_quadrants)
+NDVI_quadrants <- NDVI_quadrants %>% rename(date = system.time_start)
+NDVI_quadrants$date <- as.Date(NDVI_quadrants$date, format = "%b %d,%Y")
+
+NDVI_quadrants <- NDVI_quadrants [which(NDVI_quadrants$meanNDVI >= "0.1"), ]
+
+typeof(NDVI_quadrants$quadrant)
+NDVI_quadrants$quadrant <- as.numeric(NDVI_quadrants$quadrant)
+
+#mean NDVI per quadrant
+NDVI_quadrants <- NDVI_quadrants %>%
+  group_by(date, quadrant) %>%
+  summarize(meanNDVI = mean(meanNDVI))%>%
+  na.omit()
+
+
 
 # Plot LAI vs NDVI -----------------------------
 
