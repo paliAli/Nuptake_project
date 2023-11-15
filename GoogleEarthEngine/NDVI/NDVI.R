@@ -75,18 +75,6 @@ NDVI_quadrants <- NDVI_quadrants %>%
   na.omit()
 
 
-NDVI_quadrants_plot <- NDVI_quadrants %>%
-  ggplot(aes(x = date, y = meanNDVI, color = quadrant))+
-  geom_line(linewidth = 1) + 
-  geom_point(size = 2, alpha = 0.6)+
-  labs(x = "Date", y = "NDVI", title = "Time series NDVI for each quadrant")+
-  theme_minimal()+
-  scale_x_date(date_labels = "%Y/%m", date_breaks = "6 months")+
-  theme(axis.title.x = element_text(margin = margin(t = 20)),
-        axis.title.y = element_text(margin = margin(r = 20)),
-        plot.title = element_text (margin = margin (b = 10), size = 15))
-
-NDVI_quadrants_plot
 
 # Plot LAI vs NDVI -----------------------------
 
