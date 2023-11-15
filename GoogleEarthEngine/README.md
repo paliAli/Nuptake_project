@@ -7,8 +7,8 @@ The vegetation indices values were calculated using following equations
 + EVI = 2.5*(NIR - Red) / (NIR + 6 * Red - 7.5 * Blue + 1)
 + GNDVI = (NIR - Green)/(NIR + Green)
 
-The data was downloaded as a csv file (can be found in the folder of each vegetation index (VI) which is named using the format "nameofvegetationindex_scalex", where "scale" means the resolution of individual pixels. Next I uploaded the data into R studio, processed it and correlated it with LAI, Crop height and nitrogen uptake.
-The vegetation indices data is obtained in the time interval between 2021-01-01 and 2023-10-28, each dataset containing 68 values. NDVI and MCARI was also obtained for each of the four quadrants.
+The data was downloaded as a csv file (can be found in the folder of each vegetation index (VI) which is named using the format "nameofvegetationindex_scalex", where "scale" means the resolution of individual pixels. I also downloaded vegetation indices values for each quadrant as a csv file, which are in the folder called quadrants. Next I uploaded the data into R studio, processed it and correlated it with LAI, Crop height and nitrogen uptake.
+The mean vegetation indices data is obtained in the time interval between 2021-01-01 and 2023-10-28, each dataset containing 68 values. For each VI, data per quadrant were obtained for the same time interval.
 # Description of the Google Earth Engine Code
 
 ## Import of Data
@@ -69,7 +69,7 @@ After obtaining the values of vegetation indices from the satellite images, I lo
 ## NDVI.R
 1. Upload data (the working directory and pathways have to be modified) from csv file and correct it - omit NAs, rename date column and set the values as date, remove values of NDVI lower than 0.1 because it is most likely influenced by soil reflectance or cloud cover and not a true value
 2. Plot the time series using ggplot: x-axis is the date, y-axis is the mean value of NDVI
-3. Obtain the values for each quadrant (csv files are in GoogleEarthEngine\\NDVI\\quadrants) using a function:
+3. Obtain the values for each quadrant (csv files are in GoogleEarthEngine\\NDVI\\quadrants) using the function get_quadrant:
 	- function get_quadrant checks the name of each file and returns the number of quadrant written in the name
 	- create data frame NDVI_quadrants, which combines all 4 csv files and add column "quadrant" with the number of quadrant obtained using the get_quadrant function
 4. Plot the time series using ggplot: x-axis is the date, y-axis is the mean value of VI for the quadrant. I used facet_wrap to separate the plot in 4 by the quadrant.
@@ -84,12 +84,13 @@ After obtaining the values of vegetation indices from the satellite images, I lo
 ## NDRE.R
 1. Upload data (the working directory and pathways have to be modified) from csv file and correct it - omit NAs, rename date column and set the values as date, remove values of NDRE lower than 0.1 because it is most likely influenced by soil reflectance or cloud cover and not a true value
 2. Plot the time series using ggplot: x-axis is the date, y-axis is the mean value of NDRE
-3. Use fuzzy_inner_join to merge mean LAI (without values in June) and NDRE values by date in interval of 10 days. Because the date interval is so big, some values will be matched 2 times -> create new column called date_difference, arrange the data from lowest to highest date difference and select first value so that I only keep the combination with lower date difference.
-4. Create linear_model of NDRE and LAI, obtain the intercept, slope and R squared
-5. Plot linear regression - NDVI on x-axis, LAI on y-axis and show the equation and value of R squared on the plot
-6. Repeat steps 3-5 but with CropHeight instead of LAI
-7. Fuzzy_inner_join to merge N uptake (the dataset contains N content, biomass weight and from them calculated N uptake) and NDRE in interval of 7 days !values of VIs after cut are artifically lower and do not correspond to the N uptake -> have to manually remove dates after cut which would otherwise match and plot correlation between N content and NDRE
-8. Plot correlation between NDRE and N content, biomass weight
+3. Obtain the values for each quadrant using the function get_quadrant
+4. Use fuzzy_inner_join to merge mean LAI (without values in June) and NDRE values by date in interval of 10 days. Because the date interval is so big, some values will be matched 2 times -> create new column called date_difference, arrange the data from lowest to highest date difference and select first value so that I only keep the combination with lower date difference.
+5. Create linear_model of NDRE and LAI, obtain the intercept, slope and R squared
+6. Plot linear regression - NDVI on x-axis, LAI on y-axis and show the equation and value of R squared on the plot
+7. Repeat steps 3-5 but with CropHeight instead of LAI
+8. Fuzzy_inner_join to merge N uptake (the dataset contains N content, biomass weight and from them calculated N uptake) and NDRE in interval of 7 days !values of VIs after cut are artifically lower and do not correspond to the N uptake -> have to manually remove dates after cut which would otherwise match and plot correlation between N content and NDRE
+9. Plot correlation between NDRE and N content, biomass weight
 
 ## MCARI.R, EVI.R, GNDVI.R
 - same as NDRE
