@@ -72,17 +72,17 @@ Contains the R file for creating the time series plots for LAI and crop height. 
 The subfolders LAI and crop height contain LAI and crop height data, an R file for their processing, and created time series plots.
 
 ## GIS
-Contains the shapefiles of the field
+Contains the shapefiles of the field.
 
 ## GoogleEarthEngine
-Contains subfolders for each vegetation index, with the javascript code for their calculation, an R file for data processing, and created plots
+Contains subfolders for each vegetation index, with the javascript code for their calculation, an R file for data processing, and created plots.
 
 ## Isolab
-Contains data about nitrogen-15 and carbon-13 concentration in the samples and an R file for their processing
+Contains data about nitrogen-15 and carbon-13 concentration in the samples and an R file for their processing.
 
 ## Nuptake
-Contains an R file in which I calculated the nitrogen uptake from biomass weight and N concentration and analyzed the nitrogen uptake correlation with the measured vegetation indices (for both whole-field values and quadrant values) <br>
-The subfolder results contain the correlation plots
+Contains an R file in which I calculated the nitrogen uptake from biomass weight and N concentration and analyzed the nitrogen uptake correlation with the measured vegetation indices (for both whole-field values and quadrant values). <br>
+The subfolder results contains the correlation plots
 
 ## SPAD
 Contains measured values of chlorophyll content in leaves and its correlation with nitrogen uptake
