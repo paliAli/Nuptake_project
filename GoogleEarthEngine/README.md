@@ -56,11 +56,11 @@ First, I used a different cloud masking process which I later changed because it
 
 # Available Data
 Each VI has its own folder containing:
-+ the csv file
++ the csv file of VI values
 + code for its calculation in Google Eart Engine
 + R files named NDVI.R, NDRE.R, MCARI.R, EVI.R and GNDVI.R
 + a folder called results containing the created plots
-+ folders NDVI and MCARI also obtain folder called quadrants which obtains 4 csv files with the VIs values for each quadrant.
++ a folder called quadrants which obtains 4 csv files with the VIs values for each quadrant.
 
 # Structure of the R codes
 
