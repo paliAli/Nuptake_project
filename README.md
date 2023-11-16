@@ -81,7 +81,7 @@ Contains subfolders for each vegetation index, with the javascript code for thei
 Contains data about nitrogen-15 and carbon-13 concentration in the samples and an R file for their processing
 
 ## Nuptake
-Contains an R file in which I calculated the nitrogen uptake from biomass weight and N concentration and analyzed the nitrogen uptake correlation with the measured vegetation indices (for both whole-field values and quadrant values)
+Contains an R file in which I calculated the nitrogen uptake from biomass weight and N concentration and analyzed the nitrogen uptake correlation with the measured vegetation indices (for both whole-field values and quadrant values) <br>
 The subfolder results contain the correlation plots
 
 ## SPAD
