@@ -1,4 +1,5 @@
 # Crop height and LAI
+LAI was measured with LAI-2000 Plant Canopy Analyzer
 ## Goal
 Combine all the available crop height and LAI data and plot them.
 ## Used data
