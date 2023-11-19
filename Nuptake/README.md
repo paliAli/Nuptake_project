@@ -48,3 +48,7 @@ In earlier samplings, one sample was taken per quadrant, and the quadrant column
 8. *Remove the outliers (??)*
 9. Create a linear model and plot the correlation between N uptake and NDVI
 10. Repeat steps 5-7 for each vegetation index
+
+## VIs_Nuptake.R
+1. Merge mean N uptake per field and data frame obtaining all vegetation indices values, N concentration and dry biomass weight using fuzzy_inner_join
+2. use function ggpairs to display correlation between all variables
