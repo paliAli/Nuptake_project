@@ -66,7 +66,7 @@ Nuptake_NDVI <- Nuptake_NDVI %>%
     summarise(mean_Nuptake = first(mean_Nuptake), meanNDVI = first(meanNDVI))
 
 #probably lower NDVI due to flowering
-Nuptake_NDVI <- Nuptake_NDVI [-5, ]
+#Nuptake_NDVI <- Nuptake_NDVI [-5, ]
 
 # Linear N uptake vs NDVI -------------------------------------------------
 
@@ -118,7 +118,7 @@ Nuptake_NDRE <- Nuptake_NDRE%>%
   group_by(date.x)%>%
   summarise(mean_Nuptake = first(mean_Nuptake), meanNDRE = first(meanNDRE))
 
-Nuptake_NDRE <- Nuptake_NDRE [-5, ]
+#Nuptake_NDRE <- Nuptake_NDRE [-5, ]
 
 linear_model <- lm(mean_Nuptake ~ meanNDRE, data = Nuptake_NDRE)
 summary(linear_model)
