@@ -14,13 +14,6 @@ nitrogen_uptake <- nitrogen_uptake[!is.na(nitrogen_uptake$`%N corr.`), ]
 write.csv (nitrogen_uptake, "nitrogen_uptake.csv", row.names = FALSE)
 
 
-# Importing satellite data NDVI -------------------------------------------
-
-setwd ("C:\\Users\\apavlackova\\Documents\\Fabio's data\\biomass_samples")
-
-NDVI <- fread ("C:\\Users\\apavlackova\\Documents\\GoogleEarthEngine\\NDVI_1year_scale10_cloud50.csv")
-NDVI$date <- as.Date (NDVI$date, format = "%m/%d/%Y")
-
 
 # N uptake time series ----------------------------------------------------
 
