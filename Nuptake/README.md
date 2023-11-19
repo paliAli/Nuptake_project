@@ -24,7 +24,7 @@ When using data per quadrant, nitrogen uptake values varied greatly for some dat
 Separate the data in 70 % training data, 30 % testing data
 
 # Structure of the R codes
-The work was done in three R files: Nitrogen_uptake.R, Nitrogen_uptake_quadrant.R and VIs_Nuptake.R <br>
+The analysis is separated in three R files: Nitrogen_uptake.R, Nitrogen_uptake_quadrant.R and VIs_Nuptake.R <br>
 
 ## Nitrogen_uptake.R
 1. Calculate nitrogen uptake using the equation mentioned above for each sample
