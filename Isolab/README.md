@@ -1,7 +1,8 @@
 # Theory
-Nitrogen exists in 2 isotopes: Nitrogen-14 (99% of naturally ocuring nitrogen) and Nitrogen-15. 
+Isotopic laboratory analysis is a powerful tool used to determine the elemental composition of substances, allowing us to differentiate between various isotopes of an element. Nitrogen exists in 2 isotopes: Nitrogen-14 (99% of naturally occurring nitrogen) and Nitrogen-15. These isotopes have similar chemical properties but differ in their atomic mass due to the number of neutrons in their nuclei. Nitrogen-15 analysis involves determining the ratio of Nitrogen-15 to Nitrogen-14 within the nitrogen compounds present in the biomass. This ratio provides valuable information about various ecological and biological processes, such as identifying the sources of nitrogen uptake by plants. It provides information on the efficiency of nitrogen uptake at different growth stages and can help assess the efficiency of different fertilization practices. <br>
+The total concentration of nitrogen within the biomass has been quantified.
 
-The biomass samples has been analysed in the isolab in 4 trays, from which I manually selected the values of isolab identity, delta N15 corr. and %N corr. and combined them in the files d15N2 and d13C2.
+The biomass samples have been analyzed in the isolab in 4 trays, from which I manually selected the values of isolab identity, delta N15 corr. and %N corr. and combined them in the files d15N2 and d13C2.
 
 # Code explanation
 In the R file "isolab_merge" I loaded the csv file "naming_convention_ISOLAB(new)" (only selecting specific columns) containing the information about the samples, and the files d15N2 and d13C2.
