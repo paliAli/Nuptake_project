@@ -27,6 +27,8 @@ Separate the data in 70 % training data, 30 % testing data
 The analysis is separated in three R files: Nitrogen_uptake.R, Nitrogen_uptake_quadrant.R and VIs_Nuptake.R <br>
 
 ## Nitrogen_uptake.R
+Goal: create a correlation plot of N uptake and NDVI **per the whole field**
+
 1. Calculate nitrogen uptake using the equation mentioned above for each sample
 2. Obtain mean values per date
 3. Create a time series of N uptake
@@ -37,6 +39,8 @@ The analysis is separated in three R files: Nitrogen_uptake.R, Nitrogen_uptake_q
 8. Repeat steps 5-7 for each vegetation index
 
 ## Nitrogen_uptake_quadrant.R
+Goal: create a correlation plot of N uptake and NDVI **per quadrant**
+
 In earlier samplings, one sample was taken per quadrant, and the quadrant column was not present
 1. Fill in the column quadrant for older values (copied the column sample)
 2. Obtain mean N uptake values per quadrant and date
@@ -50,5 +54,7 @@ In earlier samplings, one sample was taken per quadrant, and the quadrant column
 10. Repeat steps 5-7 for each vegetation index
 
 ## VIs_Nuptake.R
+Goal: visualize correlation between VIs and N uptake, N concentration, and dry biomass weight
+
 1. Merge mean N uptake per field and data frame obtaining all vegetation indices values, N concentration and dry biomass weight using fuzzy_inner_join
 2. use function ggpairs to display correlation between all variables
