@@ -62,3 +62,30 @@ In R studio I used following libraries:
   
 3. <b>GIS</b>
    - Creating shapefile of the field
+
+# Folder structure
+Most documents are sorted in responding folders. <br>
+CH-OE2.Management.allyears.xlsx contains the information about management of the field, including fertilizer application and cuts.
+
+**CropHeigh+LAI** <br>
+Contains the R file for creating the time series plots for LAI and crop height. <br>
+The subfolders LAI and crop height contain LAI and crop height data, an R file for their processing, and created time series plots.
+
+**GIS** <br>
+Contains the shapefiles of the field.
+
+**GoogleEarthEngine** <br>
+Contains subfolders for each vegetation index, with the javascript code for their calculation, an R file for data processing, and created plots.
+
+**Isolab** <br>
+Contains data about nitrogen-15 and carbon-13 concentration in the samples and an R file for their processing.
+
+**Nuptake** <br>
+Contains an R file in which I calculated the nitrogen uptake from biomass weight and N concentration and analyzed the nitrogen uptake correlation with the measured vegetation indices (for both whole-field values and quadrant values). <br>
+The subfolder results contains the correlation plots.
+
+**SPAD** <br>
+Contains measured values of chlorophyll content in leaves and its correlation with nitrogen uptake.
+
+**biomass_samples** <br>
+Contains measurements of biomass weight, an R file where the biomass weight data is processed and merged with data from Isolab folder.
