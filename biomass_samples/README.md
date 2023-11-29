@@ -1,6 +1,6 @@
 # Biomass sampling
 The biomass was sampled on the study site using a 0.1 m2 sampling square <br>
-3 random samples were collected per quadrant (4 quadrants) -> **12 samples per date** 
+3 random samples were collected per quadrant (4 quadrants) -> **12 samples per date** (for the older data, only 4 samples per date were collected)
   - the data can be found in subfolders 'Older data_grassland' and 'biomass_weights' as csv files
   - The csv files contain the date (either as a column or in the name of the file), wet and dry weight, and data in the subfolder 'biomass_weights' also contains information about the quadrant, sample, and water content
 
