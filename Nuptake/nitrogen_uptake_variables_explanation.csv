@@ -1,0 +1,8 @@
+﻿Variable name, Description, Unit
+date,date on which were the analysed samples obtained,-
+dry-tara,the dry weight of the sample without the paper bag weight,g
+%N corr.,Concentration of nitrogen,%
+quadrant (Q),quadrant from which were the samples taken,-
+sample,number of sample,-
+Nitrogen_uptake_gperm2,calculated nitrogen uptake,g/m2
+Nitrogen_uptake_kgperha,calculated nitrogen uptake,kg/ha

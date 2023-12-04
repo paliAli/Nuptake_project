@@ -1,0 +1,14 @@
+﻿Crop height,,
+Variable name, Description, Unit
+Date,date on which the crop height was measured,-
+transect,quadrant on which the crop height was measured,-
+sample,number of measurement,-
+height (cm),measured crop height,cm
+mean_height(cm),average crop height per field,cm
+,,
+,,
+LAI,,
+Date,date on which the LAI was measured,-
+quadrant (Q),quadrant on which the LAI was measured,-
+LAI,average LAI value per quadrant,m2 / m2
+mean_LAI,average LAI value per field,m2 / m2

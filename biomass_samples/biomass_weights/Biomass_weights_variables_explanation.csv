@@ -1,0 +1,11 @@
+﻿Variable name, Description, Unit
+quadrant (Q),quadrant from which the sample was taken,-
+sample,number of sample taken, -
+tara (g), weight of the paper bag, g
+wet (g), fresh samples including the paper bag, g
+dry (g), dried samples including the paper bag, g
+wet-tara, fresh sample weight without the paper bag weight, g
+dry-tara, dry sample weight without the paper bag weight, g
+water, water content, g
+WC (%), water content, %
+average WC, mean water content, %
