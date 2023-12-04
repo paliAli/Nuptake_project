@@ -1,5 +1,5 @@
 ﻿Variable name, Description
-system:time_start,Date on which was the satellite image used to compute vegetation indices obtained
+system:time_start,Date from which was the satellite image used to compute vegetation indices obtained
 meanNDVI,average NDVI for the selected area
 meanNDRE,average NDRE for the selected area
 meanMCARI,average MCARI for the selected area
