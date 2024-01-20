@@ -13,14 +13,14 @@ library(ggplot2)
 library(ggthemes)
 
 
-ggplot(data = EVI, aes(x = date, y = meanEVI))+
+EVI_plot <- ggplot(data = EVI, aes(x = date, y = meanEVI))+
   geom_point(size =2, color = "darkgreen")+
   geom_line()+
   labs(title = "EVI",
        x = "Date",
        y = "EVI",) +
   theme_minimal() +
-  scale_x_date(date_labels = "%b/%Y", date_breaks = "2 months")+
+  scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months")+
   theme_minimal()+
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
@@ -28,6 +28,10 @@ ggplot(data = EVI, aes(x = date, y = meanEVI))+
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         plot.title = element_text (margin = margin (b = 20), size = 30))
+
+EVI_plot
+
+ggsave("EVI_timeseries.png", EVI_plot, width = 10, height = 5, dpi = 350)
 
 # EVI for each quadrant --------------------------------------------------
 library(purrr)
@@ -65,7 +69,7 @@ EVI_quadrants_plot <- EVI_quadrants %>%
   geom_point(size = 2, alpha = 0.6)+
   labs(x = "Date", y = "EVI", title = "Time series EVI for each quadrant")+
   theme_minimal()+
-  scale_x_date(date_labels = "%Y/%m", date_breaks = "6 months")+
+  scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months")+
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
         axis.text.y = element_text(size = 14),
@@ -75,6 +79,8 @@ EVI_quadrants_plot <- EVI_quadrants %>%
   scale_color_manual(values = c("red", "blue", "green", "purple")) 
 
 EVI_quadrants_plot
+
+ggsave("EVI_quadrants.png", EVI_quadrants_plot, width = 10, height = 5, dpi = 350)
 
 # EVI vs LAI -------------------------------------------------------------
 
@@ -129,6 +135,8 @@ linear_LAI_EVI_plot <- mean_LAI_EVI %>%
 
 linear_LAI_EVI_plot
 
+ggsave("EVIvsLAI.png", linear_LAI_EVI_plot, width = 6, height = 10, dpi = 350)
+
 # EVI vs CropHeight ------------------------------------------------------
 
 CropHeight_EVI <- fuzzy_inner_join(mean_field_CropHeight, EVI, 
@@ -175,6 +183,7 @@ linear_CH_EVI_plot <- CropHeight_EVI %>%
 
 linear_CH_EVI_plot
 
+ggsave("EVIvsCropheight.png", linear_CH_EVI_plot, width = 6, height = 10, dpi = 350)
 
 # EVI vs N content -----------------------------------------------------
 
@@ -223,7 +232,7 @@ Ncontent_EVI_plot <- Ncontent_EVI %>%
 
 Ncontent_EVI_plot
 
-
+ggsave("EVIvsNcontent.png", linear_CH_EVI_plot, width = 6, height = 10, dpi = 350)
 
 # EVI vs biomass weight --------------------------------------------------
 
@@ -272,3 +281,5 @@ biomass_EVI_plot <- biomass_EVI %>%
            hjust = 0, vjust = 1, color = "black", size = 6)
 
 biomass_EVI_plot
+
+ggsave("EVIvsBiomass.png", biomass_EVI_plot, width = 6, height = 10, dpi = 350)

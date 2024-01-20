@@ -14,14 +14,14 @@ library(ggthemes)
 
 GNDVI <- GNDVI[which(GNDVI$meanGNDVI >= "0.1"),]
 
-ggplot(data = GNDVI, aes(x = date, y = meanGNDVI))+
+GNDVI_plot <- ggplot(data = GNDVI, aes(x = date, y = meanGNDVI))+
   geom_point(size =2, color = "darkgreen")+
   geom_line()+
   labs(title = "GNDVI",
        x = "Date",
        y = "GNDVI",) +
   theme_minimal() +
-  scale_x_date(date_labels = "%b/%Y", date_breaks = "2 months")+
+  scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months")+
   theme_minimal()+
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
@@ -30,6 +30,9 @@ ggplot(data = GNDVI, aes(x = date, y = meanGNDVI))+
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         plot.title = element_text (margin = margin (b = 20), size = 30))
 
+GNDVI_plot
+
+ggsave("GNDVI_timeseries(1).png", GNDVI_plot, width = 10, height = 5, dpi = 350)
 
 # GNDVI for each quadrant --------------------------------------------------
 library(purrr)
@@ -67,7 +70,7 @@ GNDVI_quadrants_plot <- GNDVI_quadrants %>%
   geom_point(size = 2, alpha = 0.6)+
   labs(x = "Date", y = "GNDVI", title = "Time series GNDVI for each quadrant")+
   theme_minimal()+
-  scale_x_date(date_labels = "%Y/%m", date_breaks = "6 months")+
+  scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months")+
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
         axis.text.y = element_text(size = 14),
@@ -77,6 +80,8 @@ GNDVI_quadrants_plot <- GNDVI_quadrants %>%
   scale_color_manual(values = c("red", "blue", "green", "purple")) 
 
 GNDVI_quadrants_plot
+
+ggsave("GNDVI_quadrants.png", GNDVI_quadrants_plot, width = 10, height = 5, dpi = 350)
 
 #GNDVI vs LAI -------------------------------------------------------------
 
@@ -130,6 +135,8 @@ linear_LAI_GNDVI_plot <- mean_LAI_GNDVI %>%
 
 linear_LAI_GNDVI_plot
 
+ggsave("GNDVIvsLAI.png", linear_LAI_GNDVI_plot, width = 6, height = 10, dpi = 350)
+
 
 # GNDVI vs CropHeight ------------------------------------------------------
 
@@ -177,6 +184,7 @@ linear_CH_GNDVI_plot <- CropHeight_GNDVI %>%
 
 linear_CH_GNDVI_plot
 
+ggsave("GNDVIvsCropHeight.png", linear_CH_GNDVI_plot, width = 6, height = 10, dpi = 350)
 
 # GNDVI vs N content -----------------------------------------------------
 
@@ -225,6 +233,7 @@ Ncontent_GNDVI_plot <- Ncontent_GNDVI %>%
 
 Ncontent_GNDVI_plot
 
+ggsave("GNDVIvsNcontent.png", Ncontent_GNDVI_plot, width = 6, height = 10, dpi = 350)
 
 
 # GNDVI vs biomass weight --------------------------------------------------
@@ -274,3 +283,5 @@ biomass_GNDVI_plot <- biomass_GNDVI %>%
            hjust = 0, vjust = 1, color = "black", size = 6)
 
 biomass_GNDVI_plot
+
+ggsave("GNDVIvsBiomass.png", biomass_GNDVI_plot, width = 6, height = 10, dpi = 350)

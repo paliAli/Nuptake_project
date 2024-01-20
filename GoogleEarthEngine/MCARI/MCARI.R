@@ -73,7 +73,7 @@ MCARI_quadrants_plot <- MCARI_quadrants %>%
   geom_point(size = 2, alpha = 0.6)+
   labs(x = "Date", y = "MCARI", title = "Time series MCARI for each quadrant")+
   theme_minimal()+
-  scale_x_date(date_labels = "%Y/%m", date_breaks = "6 months")+
+  scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months")+
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
         axis.text.y = element_text(size = 14),
@@ -83,6 +83,8 @@ MCARI_quadrants_plot <- MCARI_quadrants %>%
   scale_color_manual(values = c("red", "blue", "green", "purple")) 
 
 MCARI_quadrants_plot
+
+ggsave("MCARI_quadrants(1).png", MCARI_quadrants_plot, width = 10, height = 5, dpi = 350)
 
 # MCARI vs LAI ------------------------------------------------------------
 
@@ -135,11 +137,9 @@ linear_LAI_MCARI_plot <- mean_LAI_MCARI %>%
                          "\nCorrelation:", round(cor(mean_LAI_MCARI$meanMCARI, mean_LAI_MCARI$mean_LAI), 2)),
            hjust = 0, vjust = 1, color = "black", size = 6)
 
-
-
 linear_LAI_MCARI_plot
 
-
+ggsave("MCARIvsLAI.png", linear_LAI_MCARI_plot, width = 6, height = 10, dpi = 350)
 
 # MCARI vs CropHeight -----------------------------------------------------
 
@@ -186,9 +186,9 @@ linear_CH_MCARI_plot <- CropHeight_MCARI %>%
            hjust = 0, vjust = 1, color = "black", size = 6)
 
 
-
 linear_CH_MCARI_plot
 
+ggsave("MCARIvsCropHeight.png", linear_CH_MCARI_plot, width = 6, height = 10, dpi = 350)
 
 # MCARI vs N content ------------------------------------------------------
 
@@ -236,7 +236,7 @@ Ncontent_MCARI_plot <- Ncontent_MCARI %>%
 
 Ncontent_MCARI_plot
 
-
+ggsave("MCARIvsNcontent.png", Ncontent_MCARI_plot, width = 6, height = 10, dpi = 350)
 
 # MCARI vs biomass weight -------------------------------------------------
 
@@ -286,3 +286,4 @@ biomass_MCARI_plot <- biomass_MCARI %>%
 
 biomass_MCARI_plot
 
+ggsave("MCARIvsBiomass.png", biomass_MCARI_plot, width = 6, height = 10, dpi = 350)
