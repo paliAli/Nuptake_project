@@ -16,12 +16,17 @@ Nuptake_q_plot <- ggplot(mean_Nuptake_q, aes(date, mean_Nuptake, color = factor(
   ylab("N uptake (g/m2)")+
   theme_minimal()+
   scale_color_manual(values = index_colors, labels = index_labels) +
-  scale_x_date(date_labels = "%b/%Y", date_breaks = "2 months") +
-  theme(axis.text.x = element_text(size = 11, angle = 35),
-        axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 20))
+  scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months") +
+  theme(plot.margin = margin(8, 30, 5, 5),
+        axis.text.x = element_text(size = 12, angle = 35),
+        axis.text.y = element_text(size = 14),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        axis.title.x = element_text(size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 30))
 
 Nuptake_q_plot
+
+ggsave("Nuptake_quadrants.png", Nuptake_q_plot, width = 10, height = 5, dpi = 350)
 
 # NDVI vs Nitrogen uptake by quadrant -------------------------------------------------
 

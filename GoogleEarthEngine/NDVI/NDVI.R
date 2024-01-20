@@ -24,7 +24,7 @@ NDVI_plot <- ggplot(data = NDVI, aes(x = date, y = meanNDVI))+
        x = "Date",
        y = "NDVI",) +
   theme_minimal() +
-  scale_x_date(date_labels = "%Y/%m", date_breaks = "2 months")+
+  scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months")+
   theme_minimal()+
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
@@ -82,7 +82,7 @@ NDVI_quadrants_plot <- NDVI_quadrants %>%
   geom_point(size = 2, alpha = 0.6)+
   labs(x = "Date", y = "NDVI", title = "Time series NDVI for each quadrant")+
   theme_minimal()+
-  scale_x_date(date_labels = "%Y/%m", date_breaks = "6 months")+
+  scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months") +
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
         axis.text.y = element_text(size = 14),
@@ -93,7 +93,7 @@ NDVI_quadrants_plot <- NDVI_quadrants %>%
 
 NDVI_quadrants_plot
 
-ggsave("NDVi_quadrants(1).png", NDVI_quadrants_plot, width = 10, height = 5, dpi = 350)
+ggsave("NDVi_quadrants.png", NDVI_quadrants_plot, width = 10, height = 5, dpi = 350)
 
 # Plot LAI vs NDVI -----------------------------
 

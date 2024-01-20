@@ -1,7 +1,7 @@
 library (data.table)
 library(dplyr)
 
-setwd("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine")
+setwd("C:\\Users\\pavla\\OneDrive\\Documents\\GitHub\\Nuptake_project\\GoogleEarthEngine")
 
 NDRE <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDRE\\NDRE_scale10.csv")
 NDRE <- NDRE %>% na.omit()%>%
@@ -24,7 +24,7 @@ NDRE_plot <- ggplot(data = NDRE, aes(x = date, y = meanNDRE))+
        x = "Date",
        y = "NDRE",) +
   theme_minimal() +
-  scale_x_date(date_labels = "%b/%Y", date_breaks = "2 months")+
+  scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months")+
   theme_minimal()+
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
@@ -73,7 +73,7 @@ NDRE_quadrants_plot <- NDRE_quadrants %>%
   geom_point(size = 2, alpha = 0.6)+
   labs(x = "Date", y = "NDRE", title = "Time series NDRE for each quadrant")+
   theme_minimal()+
-  scale_x_date(date_labels = "%Y/%m", date_breaks = "6 months")+
+  scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months")+
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
         axis.text.y = element_text(size = 14),

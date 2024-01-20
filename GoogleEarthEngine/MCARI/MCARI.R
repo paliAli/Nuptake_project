@@ -13,14 +13,14 @@ library(ggthemes)
 
 MCARI <- MCARI [which(MCARI$meanMCARI >= 0.01), ]
 
-ggplot(data = MCARI, aes(x = date, y = meanMCARI))+
+MCARI_plot <- ggplot(data = MCARI, aes(x = date, y = meanMCARI))+
   geom_point(size =2, color = "darkgreen")+
   geom_line()+
   labs(title = "MCARI",
        x = "Date",
        y = "MCARI",) +
   theme_minimal() +
-  scale_x_date(date_labels = "%Y/%m", date_breaks = "2 months")+
+  scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months")+
   theme_minimal()+
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
@@ -28,6 +28,10 @@ ggplot(data = MCARI, aes(x = date, y = meanMCARI))+
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         axis.title.x = element_text(size = 15),
         plot.title = element_text (margin = margin (b = 20), size = 30))
+
+MCARI_plot
+
+ggsave("MCARI_timeseries(1).png", MCARI_plot, width = 10, height = 5, dpi = 350)
 
 library(fuzzyjoin)
 
