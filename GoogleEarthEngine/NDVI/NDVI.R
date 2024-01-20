@@ -1,7 +1,7 @@
 library(data.table)
 library(dplyr)
 
-setwd("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine")
+setwd("C:\\Users\\pavla\\OneDrive\\Documents\\GitHub\\Nuptake_project\\GoogleEarthEngine\\NDVI")
 
 NDVI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDVI\\NDVI_scale10.csv")
 NDVI <- NDVI %>% na.omit()
@@ -34,6 +34,8 @@ NDVI_plot <- ggplot(data = NDVI, aes(x = date, y = meanNDVI))+
         plot.title = element_text (margin = margin (b = 20), size = 30))
 
 NDVI_plot
+
+ggsave("NDVI_timeseries.png", NDVI_plot, width = 10, height = 5, dpi = 350)
 
 # NDVI for each quadrant --------------------------------------------------
 
@@ -91,6 +93,8 @@ NDVI_quadrants_plot <- NDVI_quadrants %>%
 
 NDVI_quadrants_plot
 
+ggsave("NDVi_quadrants(1).png", NDVI_quadrants_plot, width = 10, height = 5, dpi = 350)
+
 # Plot LAI vs NDVI -----------------------------
 
 library(fuzzyjoin)
@@ -144,7 +148,7 @@ linear_LAI_NDVI_plot <- LAI_NDVI %>%
 
 linear_LAI_NDVI_plot
 
-
+ggsave("NDVIvsLAI(1).png", linear_LAI_NDVI_plot, width = 6, height = 10, dpi = 350)
 
 
 # Plot CropHeight vs NDVI -------------------------------------------------
@@ -195,7 +199,7 @@ linear_NDVI_CH_plot <- CropHeight_NDVI %>%
 
 linear_NDVI_CH_plot
 
-
+ggsave("NDVIvsCropHeight(1).png", linear_NDVI_CH_plot, width = 6, height = 10, dpi = 350)
 
 # NDVI vs N content -----------------------------------------------------
 
@@ -244,6 +248,7 @@ Ncontent_NDVI_plot <- Ncontent_NDVI %>%
 
 Ncontent_NDVI_plot
 
+ggsave("NDVIvsNcontent(1).png", Ncontent_NDVI_plot, width = 6, height = 10, dpi = 350)
 
 # NDVI vs biomass weight --------------------------------------------------
 
@@ -292,3 +297,5 @@ biomass_NDVI_plot <- biomass_NDVI %>%
            hjust = 0, vjust = 1, color = "black", size = 6)
 
 biomass_NDVI_plot
+
+ggsave("NDVIvsBiomass(1).png", biomass_NDVI_plot, width = 6, height = 10, dpi = 350)

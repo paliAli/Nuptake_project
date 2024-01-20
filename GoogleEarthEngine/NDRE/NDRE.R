@@ -35,6 +35,8 @@ NDRE_plot <- ggplot(data = NDRE, aes(x = date, y = meanNDRE))+
 
 NDRE_plot
 
+ggsave("NDRE_timeseries.png", NDRE_plot, width = 10, height = 5, dpi = 350)
+
 # NDRE for each quadrant --------------------------------------------------
 library(purrr)
 
@@ -81,6 +83,8 @@ NDRE_quadrants_plot <- NDRE_quadrants %>%
   scale_color_manual(values = c("red", "blue", "green", "purple")) 
 
 NDRE_quadrants_plot
+
+ggsave("NDRE_quadrants(1).png", NDRE_quadrants_plot, width = 10, height = 5, dpi = 350)
 
 # NDRE vs LAI -------------------------------------------------------------
 library(fuzzyjoin)
@@ -133,6 +137,8 @@ linear_LAI_NDRE_plot <- mean_LAI_NDRE %>%
 
 linear_LAI_NDRE_plot
 
+ggsave("NDREvsLAI(1).png", linear_LAI_NDRE_plot, width = 6, height = 10, dpi = 350)
+
 # NDRE vs CropHeight ------------------------------------------------------
 
 CropHeight_NDRE <- fuzzy_inner_join(mean_field_CropHeight, NDRE, 
@@ -183,6 +189,8 @@ linear_CH_NDRE_plot <- CropHeight_NDRE %>%
 
 linear_CH_NDRE_plot
 
+ggsave("NDREvsCropHeight(1).png", linear_CH_NDRE_plot, width = 6, height = 10, dpi = 350)
+
 
 # NDRE vs N content -----------------------------------------------------
 
@@ -231,7 +239,7 @@ Ncontent_NDRE_plot <- Ncontent_NDRE %>%
 
 Ncontent_NDRE_plot
 
-
+ggsave("NDREvsNcontent(1).png", Ncontent_NDRE_plot, width = 6, height = 10, dpi = 350)
 
 # NDRE vs biomass weight --------------------------------------------------
 
@@ -281,3 +289,4 @@ biomass_NDRE_plot <- biomass_NDRE %>%
 
 biomass_NDRE_plot
 
+ggsave("NDREvsBiomass(1).png", biomass_NDRE_plot, width = 6, height = 10, dpi = 350)
