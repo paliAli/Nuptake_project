@@ -30,7 +30,6 @@ Cloud cover can negatively affect the VIs values, therefore it is crucial to acc
 I first filter the images so that they meet my specific criteria. This includes:
 + date range 2021-01-01 to 2023-10-28
 + region of interest: I uploaded the shapefile "manual_measurements_area" located in the GIS folder and named it "Boundaries"
-+ cloud cover percentage: I used the property of the images CLOUDY_PIXEL_COVERAGE, filltering out images which are more than 50 % covered by clouds
 + snow and ice percentage: I excluded images containing more than 20 % snow
 
 ### 2. s2cloudless Dataset Integration

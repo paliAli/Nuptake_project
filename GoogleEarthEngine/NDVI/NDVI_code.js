@@ -7,6 +7,54 @@ var images = sentinel
   .filterBounds(Boundaries)
   .filter(ee.Filter.lt('SNOW_ICE_PERCENTAGE', 20));
 
+
+
+var cloudless = s2cloudless
+    .filter(ee.Filter.date(startDate, endDate))
+    .filterBounds(Boundaries);
+
+// Join the filtered s2cloudless collection to the SR collection by the 'system:index' property.
+var s2cloudlessimages = ee.ImageCollection(ee.Join.saveFirst('s2cloudless').apply({
+        'primary': images,
+        'secondary': cloudless,
+        'condition': ee.Filter.equals({
+            'leftField': 'system:index',
+            'rightField': 'system:index'
+        })
+    }));
+
+print('s2cloudless', s2cloudlessimages);
+
+// Function to calculate the mean cloud probability within the ROI
+var calculateCloudProbability = function(image) {
+  // Try to access the 'probability' band, and handle cases where it's not available
+  var cloudProbability = ee.Image(image.get('s2cloudless')).select('probability');
+  
+  // Check if 'probability' band is available
+  var hasProbabilityBand = cloudProbability.bandNames().contains('probability');
+  
+  // Calculate mean cloud probability if the band is available
+  var meanCloudProbability = hasProbabilityBand
+    ? cloudProbability.reduceRegion({
+        reducer: ee.Reducer.mean(),
+        geometry: Boundaries,
+        scale: 10
+      }).get('probability')
+    : 1.0;  // Set to 1.0 as a placeholder for images without 'probability'
+  
+  return image.set('CloudProbability', meanCloudProbability);
+};
+
+// Apply the calculateCloudProbability function to the Sentinel-2 collection
+var s2cloudlessCollection = s2cloudlessimages.map(calculateCloudProbability);
+
+// Filter images based on high cloud probability within the ROI
+var CloudProbabilityThreshold = 20;  // Adjust the threshold as needed
+var CloudlessImages = s2cloudlessCollection.filter(ee.Filter.lt('CloudProbability', CloudProbabilityThreshold));
+
+// Display the filtered images
+print('Images with low cloud probability:', CloudlessImages);
+
 var scl = images.select('SCL');
 Map.addLayer (scl, {min: 1, max: 11}, 'SCL Band');
 
@@ -25,7 +73,7 @@ var s2_clear_sky = function(image){
   
 };
 
-var maskedImages = images.map(s2_clear_sky);
+var maskedImages = CloudlessImages.map(s2_clear_sky);
 
 // Visualize an original image
 Map.addLayer(images.first(), { bands: ['B4', 'B3', 'B2'], max: 3000 }, 'Original Image');
@@ -60,6 +108,8 @@ var dailyComposite = ee.ImageCollection.fromImages(
   })
 );
 
+
+
 var ndviCollection = dailyComposite.map(ndvi);
 print ('ndviCollection', ndviCollection);
 
@@ -73,9 +123,10 @@ var meanNDVI = ndviCollection.map(function (image) {
   return image.set('meanNDVI', meanValue); // Convert to Feature and set 'meanNDVI' property
 });
 
+print(meanNDVI);
 
-var nd = ndviCollection.mean().clip(Boundaries);
-Map.addLayer(nd, { min: 0, max: 1, palette: ["red", "green"] }, 'NDVI');
+var nd = ndviCollection.first().clip(Boundaries);
+Map.addLayer(nd, { min: 0, max: 1, palette: ["red", "orange", "yellow", "green"] }, 'NDVI');
 
 
 var chart = ui.Chart.feature.byFeature(meanNDVI, 'system:time_start', ['meanNDVI'])
