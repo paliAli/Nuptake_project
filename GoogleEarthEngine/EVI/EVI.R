@@ -232,7 +232,7 @@ Ncontent_EVI_plot <- Ncontent_EVI %>%
 
 Ncontent_EVI_plot
 
-ggsave("EVIvsNcontent.png", linear_CH_EVI_plot, width = 6, height = 10, dpi = 350)
+ggsave("EVIvsNcontent.png", Ncontent_EVI_plot, width = 6, height = 10, dpi = 350)
 
 # EVI vs biomass weight --------------------------------------------------
 

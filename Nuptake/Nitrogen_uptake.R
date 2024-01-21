@@ -48,6 +48,7 @@ library(ggthemes)
 
 mean_Nuptake <- mean_Nuptake[which(mean_Nuptake$date <= "2023-06-01"),]
 
+write.csv (mean_Nuptake, "mean_nitrogen_uptake.csv", row.names = FALSE)
 
 # mean Nitrogen uptake vs NDVI--------------------------------
 
@@ -64,6 +65,7 @@ Nuptake_NDVI <- Nuptake_NDVI [-11, ]
 Nuptake_NDVI <- Nuptake_NDVI %>% 
     group_by(date.x)%>%
     summarise(mean_Nuptake = first(mean_Nuptake), meanNDVI = first(meanNDVI))
+
 
 #probably lower NDVI due to flowering
 #Nuptake_NDVI <- Nuptake_NDVI [-5, ]
@@ -103,6 +105,7 @@ linear_Nuptake_NDVI_plot <- Nuptake_NDVI %>%
 
 linear_Nuptake_NDVI_plot
 
+ggsave("NDVIvsNuptake.png", linear_Nuptake_NDVI_plot, width = 6, height = 10, dpi = 350)
 
 # Nuptake vs NDRE ---------------------------------------------------------
 
@@ -141,8 +144,8 @@ linear_Nuptake_NDRE_plot <- Nuptake_NDRE %>%
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate("text",
-           x = min(Nuptake_NDRE$meanNDRE) + 0.03, 
-           y = max(Nuptake_NDRE$mean_Nuptake) - 0.5,
+           x = min(Nuptake_NDRE$meanNDRE) + 0.02, 
+           y = max(Nuptake_NDRE$mean_Nuptake) - 1,
            label = paste("y =", format(slope, digits = 2), 
                          "*x +", 
                          format(intercept, digits = 2),
@@ -151,6 +154,8 @@ linear_Nuptake_NDRE_plot <- Nuptake_NDRE %>%
            hjust = 0, vjust = 1, color = "black", size = 6)
 
 linear_Nuptake_NDRE_plot
+
+ggsave("NDREvsNuptake.png", linear_Nuptake_NDRE_plot, width = 6, height = 10, dpi = 350)
 
 # Nuptake vs MCARI --------------------------------------------------------
 
@@ -200,6 +205,7 @@ linear_Nuptake_MCARI_plot <- Nuptake_MCARI%>%
 
 linear_Nuptake_MCARI_plot
 
+ggsave("MCARIvsNuptake.png", linear_Nuptake_MCARI_plot, width = 6, height = 10, dpi = 350)
 
 # EVI vs N uptake ---------------------------------------------------------
 
@@ -248,6 +254,8 @@ linear_Nuptake_EVI_plot <- Nuptake_EVI%>%
 
 linear_Nuptake_EVI_plot
 
+ggsave("EVIvsNuptake.png", linear_Nuptake_EVI_plot, width = 6, height = 10, dpi = 350)
+
 # GNDVI vs N uptake -------------------------------------------------------
 
 Nuptake_GNDVI <- fuzzy_inner_join(mean_Nuptake, GNDVI, 
@@ -293,3 +301,5 @@ linear_Nuptake_GNDVI_plot <- Nuptake_GNDVI%>%
            hjust = 0, vjust = 1, color = "black", size = 6)
 
 linear_Nuptake_GNDVI_plot
+
+ggsave("GNDVIvsNuptake.png", linear_Nuptake_GNDVI_plot, width = 6, height = 10, dpi = 350)

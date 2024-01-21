@@ -198,7 +198,7 @@ Ncontent_MCARI <- fuzzy_inner_join(mean_Nuptake, MCARI,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-Ncontent_MCARI <- Ncontent_MCARI [-c(9,11),]
+Ncontent_MCARI <- Ncontent_MCARI [-11,]
 
 Ncontent_MCARI <- Ncontent_MCARI%>%
   group_by(date.x)%>%
@@ -246,7 +246,7 @@ biomass_MCARI <- fuzzy_inner_join(mean_Nuptake, MCARI,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-biomass_MCARI <- biomass_MCARI[-c(9,11),]
+biomass_MCARI <- biomass_MCARI[-11,]
 
 biomass_MCARI <- biomass_MCARI%>%
   group_by(date.x)%>%

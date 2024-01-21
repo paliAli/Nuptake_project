@@ -93,7 +93,7 @@ mean_LAI_GNDVI <- fuzzy_inner_join(mean_LAI_values, GNDVI,
   mutate(date_difference = abs(difftime(Date, date, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-mean_LAI_GNDVI <- mean_LAI_GNDVI[-c(16,18), ]
+mean_LAI_GNDVI <- mean_LAI_GNDVI[-18, ]
 
 mean_LAI_GNDVI <- mean_LAI_GNDVI %>% group_by(Date)%>%
   summarise(mean_LAI = first(mean_LAI), meanGNDVI = first(meanGNDVI))
@@ -194,7 +194,7 @@ Ncontent_GNDVI <- fuzzy_inner_join(mean_Nuptake, GNDVI,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-Ncontent_GNDVI <- Ncontent_GNDVI[-c(9,11), ]
+Ncontent_GNDVI <- Ncontent_GNDVI[-11, ]
 
 Ncontent_GNDVI <- Ncontent_GNDVI%>%
   group_by(date.x)%>%
@@ -244,7 +244,7 @@ biomass_GNDVI <- fuzzy_inner_join(mean_Nuptake, GNDVI,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-biomass_GNDVI <- biomass_GNDVI [-c(9,11),]
+biomass_GNDVI <- biomass_GNDVI [-11,]
 
 biomass_GNDVI<- biomass_GNDVI %>%  
   group_by(date.x)%>%

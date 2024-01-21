@@ -106,7 +106,7 @@ LAI_NDVI <- fuzzy_inner_join(mean_LAI_values, NDVI,
   mutate(date_difference = abs(difftime(Date, date, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-LAI_NDVI <- LAI_NDVI [-c(16,18), ]
+LAI_NDVI <- LAI_NDVI [-18, ]
 
 LAI_NDVI <- LAI_NDVI %>% group_by(Date)%>%
   summarise(mean_LAI = first(mean_LAI), meanNDVI = first(meanNDVI))
@@ -148,7 +148,7 @@ linear_LAI_NDVI_plot <- LAI_NDVI %>%
 
 linear_LAI_NDVI_plot
 
-ggsave("NDVIvsLAI(1).png", linear_LAI_NDVI_plot, width = 6, height = 10, dpi = 350)
+ggsave("NDVIvsLAI(2).png", linear_LAI_NDVI_plot, width = 6, height = 10, dpi = 350)
 
 
 # Plot CropHeight vs NDVI -------------------------------------------------
@@ -209,7 +209,7 @@ Ncontent_NDVI <- fuzzy_inner_join(mean_Nuptake, NDVI,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-Ncontent_NDVI <- Ncontent_NDVI[-c(9,11), ]
+Ncontent_NDVI <- Ncontent_NDVI[-11, ]
 
 Ncontent_NDVI <- Ncontent_NDVI%>%
   group_by(date.x)%>%
@@ -258,7 +258,7 @@ biomass_NDVI <- fuzzy_inner_join(mean_Nuptake, NDVI,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-biomass_NDVI <- biomass_NDVI [-c(9,11),]
+biomass_NDVI <- biomass_NDVI [-11,]
 
 biomass_NDVI<- biomass_NDVI %>%  
   group_by(date.x)%>%

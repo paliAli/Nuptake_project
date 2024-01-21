@@ -95,7 +95,7 @@ mean_LAI_NDRE <- fuzzy_inner_join(mean_LAI_values, NDRE,
   mutate(date_difference = abs(difftime(Date, date, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-mean_LAI_NDRE <- mean_LAI_NDRE [-c(16,18), ]
+mean_LAI_NDRE <- mean_LAI_NDRE [-18, ]
 
 mean_LAI_NDRE <- mean_LAI_NDRE %>% group_by(Date)%>%
   summarise(mean_LAI = first(mean_LAI), meanNDRE = first(meanNDRE))
@@ -137,7 +137,7 @@ linear_LAI_NDRE_plot <- mean_LAI_NDRE %>%
 
 linear_LAI_NDRE_plot
 
-ggsave("NDREvsLAI(1).png", linear_LAI_NDRE_plot, width = 6, height = 10, dpi = 350)
+ggsave("NDREvsLAI(2).png", linear_LAI_NDRE_plot, width = 6, height = 10, dpi = 350)
 
 # NDRE vs CropHeight ------------------------------------------------------
 
@@ -200,7 +200,7 @@ Ncontent_NDRE <- fuzzy_inner_join(mean_Nuptake, NDRE,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-Ncontent_NDRE <- Ncontent_NDRE[-c(9,11), ]
+Ncontent_NDRE <- Ncontent_NDRE[-11, ]
 
 Ncontent_NDRE <- Ncontent_NDRE%>%
   group_by(date.x)%>%
@@ -249,7 +249,7 @@ biomass_NDRE <- fuzzy_inner_join(mean_Nuptake, NDRE,
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
 
-biomass_NDRE <- biomass_NDRE [-c(9,11),]
+biomass_NDRE <- biomass_NDRE [-11,]
   
 biomass_NDRE<- biomass_NDRE %>%  
   group_by(date.x)%>%
