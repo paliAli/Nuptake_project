@@ -174,9 +174,13 @@ merged_MCARI_nUptake <- merged_MCARI_nUptake %>%
   group_by(date.x, `quadrant (Q)`)%>%
   summarize(mean_Nuptake = first(mean_Nuptake), meanMCARI = first(meanMCARI))
 
+merged_MCARI_nUptake <- merged_MCARI_nUptake[which(merged_MCARI_nUptake$date.x <= "2023-06-01"),]
+
 #Find outliers
 ggplot(merged_MCARI_nUptake, aes(x = meanMCARI, y = `mean_Nuptake`, group = date.x))+
   geom_boxplot(outlier.colour="red", outlier.size = 2)
+
+merged_MCARI_nUptake <- merged_MCARI_nUptake [-c(7,10), ]
 
 # Linear N uptake vs MCARI per quadrant -------------------------------------------------
 
@@ -190,7 +194,7 @@ slope <- linear_coef[2]
 r_squared <- 1 - sum(residuals(linear_model)^2) / sum((merged_MCARI_nUptake$mean_Nuptake - mean(merged_MCARI_nUptake$mean_Nuptake))^2)
 
 
-merged_MCARI_nUptake %>%
+Nuptake_MCARI_q <- merged_MCARI_nUptake %>%
   ggplot(aes(x = meanMCARI, y = mean_Nuptake))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
@@ -202,14 +206,16 @@ merged_MCARI_nUptake %>%
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate("text",
-           x = min(merged_MCARI_nUptake$meanMCARI) + 0.06, 
-           y = max(merged_MCARI_nUptake$mean_Nuptake) - 0.9,
+           x = min(merged_MCARI_nUptake$meanMCARI) + 0.01, 
+           y = max(merged_MCARI_nUptake$mean_Nuptake) - 2.8,
            label = paste("y =", format(slope, digits = 2), 
                          "*x +", 
                          format(intercept, digits = 2),
                          "\nR2 =", round(r_squared, 2),
                          "\nCorrelation:", round(cor(merged_MCARI_nUptake$meanMCARI, merged_MCARI_nUptake$mean_Nuptake), 2)),
            hjust = 0, vjust = 1, color = "black", size = 6)
+
+ggsave("MCARIvsNuptake_q.png", Nuptake_MCARI_q, width = 6, height = 10, dpi = 350)
 
 # GNDVI vs Nuptake per quadrant --------------------------------------------
 GNDVI_quadrants$quadrant <- as.numeric(GNDVI_quadrants$quadrant)
@@ -232,7 +238,7 @@ ggplot(merged_GNDVI_nUptake, aes(x = meanGNDVI, y = `mean_Nuptake`, group = date
   geom_boxplot(outlier.colour="red", outlier.size = 2)
 
 
-# Linear N uptake vs NDRE per quadrant -------------------------------------------------
+# Linear N uptake vs GNDVI per quadrant -------------------------------------------------
 
 linear_model <- lm(mean_Nuptake ~ meanGNDVI, data = merged_GNDVI_nUptake)
 summary(linear_model)
@@ -244,7 +250,7 @@ slope <- linear_coef[2]
 r_squared <- 1 - sum(residuals(linear_model)^2) / sum((merged_GNDVI_nUptake$mean_Nuptake - mean(merged_GNDVI_nUptake$mean_Nuptake))^2)
 
 
-merged_GNDVI_nUptake %>%
+Nuptake_GNDVI_q <- merged_GNDVI_nUptake %>%
   ggplot(aes(x = meanGNDVI, y = mean_Nuptake))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
@@ -264,6 +270,8 @@ merged_GNDVI_nUptake %>%
                          "\nR2 =", round(r_squared, 2),
                          "\nCorrelation:", round(cor(merged_GNDVI_nUptake$meanGNDVI, merged_GNDVI_nUptake$mean_Nuptake), 2)),
            hjust = 0, vjust = 1, color = "black", size = 6)
+
+ggsave("GNDVIvsNuptake_q.png", Nuptake_GNDVI_q, width = 6, height = 10, dpi = 350)
 
 # EVI vs Nuptake per quadrant --------------------------------------------
 EVI_quadrants$quadrant <- as.numeric(EVI_quadrants$quadrant)

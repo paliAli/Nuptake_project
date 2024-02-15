@@ -4,25 +4,35 @@ library(GGally)
 library(ggplot2)
 library(ggthemes)
 
-Nuptake_VIs <- fuzzy_inner_join(mean_Nuptake, VI_ts, 
+Nuptake_VIs <- fuzzy_inner_join(mean_Nuptake, VI_df, 
                                   by = c("date" = "date"),
                                   match_fun = function(x, y) abs(difftime(x, y, units = "days")) <= 7) %>%
   mutate(date_difference = abs(difftime(date.x, date.y, units = "days")))%>%
   arrange(date_difference, decreasing = FALSE)
   
-Nuptake_VIs <- Nuptake_VIs [-c(3,11), ]
+Nuptake_VIs <- Nuptake_VIs [-11, ]
   
 Nuptake_VIs <- Nuptake_VIs %>%
   group_by(date.x)%>%
   summarise(`dry-tara` = first(`dry-tara`), `%N corr.` = first(`%N corr.`), Nuptake = first(mean_Nuptake), meanMCARI = first(meanMCARI), meanNDVI = first (meanNDVI), meanNDRE = first(meanNDRE), meanEVI = first(meanEVI), meanGNDVI = first (meanGNDVI))
 
+#also with LAI
+Nuptake_VIs_LAI <- fuzzy_inner_join(mean_Nuptake, LAI_VI, 
+                                by = c("date" = "date"),
+                                match_fun = function(x, y) abs(difftime(x, y, units = "days")) <= 7)
+
+Nuptake_VIs_LAI <- Nuptake_VIs_LAI %>%
+  group_by(date.x)%>%
+  summarise(`dry-tara` = first(`dry-tara`), `%N corr.` = first(`%N corr.`), Nuptake = first(mean_Nuptake), LAI = first(mean_LAI), meanMCARI = first(meanMCARI), meanNDVI = first (meanNDVI), meanNDRE = first(meanNDRE), meanEVI = first(meanEVI), meanGNDVI = first (meanGNDVI))
 
 
 Nuptake_VIs <- Nuptake_VIs[which(Nuptake_VIs$meanNDVI >= "0.1"),]
 
 Nuptake_VIs <- Nuptake_VIs[which(Nuptake_VIs$date.x <= "2023-06-01"),]
 
-ggpairs(data = Nuptake_VIs, columns = 2:9, title = "Nitrogen uptake data")
+VIs_correlations <- ggpairs(data = Nuptake_VIs_LAI, columns = 2:10, title = "Nitrogen uptake data")
+
+ggsave("VIs_correlations.png", VIs_correlations, width = 12, height = 7.5, dpi = 350)
 
 fit_1 <- lm(Nuptake ~ meanMCARI, data = Nuptake_VIs)
 summary(fit_1)

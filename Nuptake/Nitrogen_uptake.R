@@ -2,7 +2,7 @@
 # Calculating nitrogen uptake per m2 --------------------------------------
 
 nitrogen_uptake <- merged_data %>%
-  dplyr::select (`date`,  `dry-tara`, `%N corr.`, `quadrant (Q)`, sample)%>%
+  dplyr::select (`date`,  `dry-tara`, `%N corr.`, `quadrant (Q)`, sample, Material)%>%
 #the dry biomass weight is now in g/0.1m2 so I need to multiply by 10 to get g/m2
   mutate (Nitrogen_uptake_gperm2 = (`dry-tara` * 10) * (`%N corr.` / 100))%>%
   mutate (Nitrogen_uptake_kgperha = (`dry-tara` * 100) * (`%N corr.` / 100))
@@ -13,17 +13,19 @@ nitrogen_uptake <- nitrogen_uptake[!is.na(nitrogen_uptake$`%N corr.`), ]
 
 write.csv (nitrogen_uptake, "nitrogen_uptake.csv", row.names = FALSE)
 
-
-
 # N uptake time series ----------------------------------------------------
 
 mean_Nuptake <- nitrogen_uptake %>%
   group_by(date) %>%
-  summarize(`dry-tara` = mean(`dry-tara`), `%N corr.` = mean(`%N corr.`), mean_Nuptake = mean(Nitrogen_uptake_gperm2))
+  summarize(`dry-tara` = mean(`dry-tara`), `%N corr.` = mean(`%N corr.`), mean_Nuptake = mean(Nitrogen_uptake_gperm2), material = first(Material))
 
-Nuptake_plot <- ggplot(mean_Nuptake, aes(date, mean_Nuptake)) + 
+mean_Nuptake <- mean_Nuptake %>%
+  mutate(material = recode(material, 'aboveground biomass' = 'winter wheat'),
+         material = recode(material, 'mix' = 'grass'))
+
+Nuptake_plot <- ggplot(mean_Nuptake, aes(date, mean_Nuptake, shape = factor(material), color = factor(material))) + 
   geom_line(linewidth = 1) + 
-  geom_point(size = 2)+
+  geom_point(size = 4)+
   ggtitle("Nitrogen uptake time series") + 
   xlab("date") + 
   ylab("N uptake (g/m2)")+
@@ -32,7 +34,12 @@ Nuptake_plot <- ggplot(mean_Nuptake, aes(date, mean_Nuptake)) +
   scale_x_date(date_labels = "%b/%Y", date_breaks = "2 months") +
   theme(axis.text.x = element_text(size = 11, angle = 35),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 20))
+        plot.title = element_text (margin = margin (b = 20), size = 20))+
+  scale_shape_manual(values = c(16, 17)) +
+  scale_color_manual(values = c("green3", "gold3")) +
+  guides(shape = guide_legend(title = "Biomass type",
+                              keywidth = 1.5),
+         color = guide_legend(title = "Biomass type",))
 
 Nuptake_plot
 
@@ -64,7 +71,7 @@ Nuptake_NDVI <- Nuptake_NDVI [-11, ]
 
 Nuptake_NDVI <- Nuptake_NDVI %>% 
     group_by(date.x)%>%
-    summarise(mean_Nuptake = first(mean_Nuptake), meanNDVI = first(meanNDVI))
+    summarise(mean_Nuptake = first(mean_Nuptake), meanNDVI = first(meanNDVI), material = first(material))
 
 
 #probably lower NDVI due to flowering
@@ -119,9 +126,10 @@ Nuptake_NDRE <- Nuptake_NDRE [-11, ]
 
 Nuptake_NDRE <- Nuptake_NDRE%>%
   group_by(date.x)%>%
-  summarise(mean_Nuptake = first(mean_Nuptake), meanNDRE = first(meanNDRE))
+  summarise(mean_Nuptake = first(mean_Nuptake), meanNDRE = first(meanNDRE), material = first(material))
 
 #Nuptake_NDRE <- Nuptake_NDRE [-5, ]
+
 
 linear_model <- lm(mean_Nuptake ~ meanNDRE, data = Nuptake_NDRE)
 summary(linear_model)
@@ -169,7 +177,7 @@ Nuptake_MCARI <- Nuptake_MCARI [-11, ]
 
 Nuptake_MCARI <- Nuptake_MCARI %>%   
   group_by(date.x)%>%
-  summarise(mean_Nuptake = first(mean_Nuptake), meanMCARI = first(meanMCARI))
+  summarise(mean_Nuptake = first(mean_Nuptake), meanMCARI = first(meanMCARI), material = first(material))
 
 
 
@@ -219,7 +227,7 @@ Nuptake_EVI <- Nuptake_EVI [-11, ]
 
 Nuptake_EVI <- Nuptake_EVI %>%
   group_by(date.x)%>%
-  summarise(mean_Nuptake = first(mean_Nuptake), meanEVI = first(meanEVI))
+  summarise(mean_Nuptake = first(mean_Nuptake), meanEVI = first(meanEVI), material = first(material))
 
 
 linear_model <- lm(mean_Nuptake ~ meanEVI, data = Nuptake_EVI)
