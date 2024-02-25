@@ -1,8 +1,8 @@
 library (data.table)
 library(dplyr)
 
-setwd("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine")
-EVI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\EVI\\EVI_scale10.csv")
+setwd("C:\\Users\\pavla\\OneDrive\\Documents\\GitHub\\Nuptake_project\\GoogleEarthEngine\\EVI")
+EVI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\GitHub\\Nuptake_project\\GoogleEarthEngine\\EVI\\EVI_scale10.csv")
 EVI <- EVI %>% na.omit() %>%
   rename(date = 'system.time_start')
 
@@ -136,6 +136,51 @@ linear_LAI_EVI_plot <- mean_LAI_EVI %>%
 linear_LAI_EVI_plot
 
 ggsave("EVIvsLAI.png", linear_LAI_EVI_plot, width = 6, height = 10, dpi = 350)
+
+# EVI vs LAI (exponential) -------------------------------------------------------------
+
+exponential_model <- lm(log(mean_LAI) ~ meanEVI, data = mean_LAI_EVI)
+summary(exponential_model)
+
+# Extract coefficients
+exponential_coef <- coef(exponential_model)
+intercept_exp <- exponential_coef[1]
+slope_exp <- exponential_coef[2]
+
+r_squared_exp <- 1 - sum(residuals(exponential_model)^2) / sum((log(mean_LAI_EVI$mean_LAI) - mean(log(mean_LAI_EVI$mean_LAI)))^2)
+
+
+exponential_LAI_EVI_plot <- mean_LAI_EVI %>%
+  ggplot(aes(x = meanEVI, y = mean_LAI))+
+  geom_point(size = 3)+
+  geom_smooth(method = lm, se = FALSE, formula = y ~ exp(x), color = "blue", aes(group = 1))+
+  labs(x = "EVI", y = "LAI", title = "EVI vs LAI (exponential)")+
+  theme_minimal()+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22),
+        legend.title = element_text(size = 14),
+        legend.text = element_text(size = 13))+
+  annotate(
+    "text",
+    x = min(mean_LAI_EVI$meanEVI) + 0.02,
+    y = max(mean_LAI_EVI$mean_LAI) - 1,
+    label = paste(
+      "y = ",
+      "exp(",
+      format(slope_exp, digits = 2),
+      "*x +", format(exp(intercept_exp), digits = 2),
+      ")\nR2 =", round(r_squared_exp, 2)
+    ),
+    hjust = 0, vjust = 1, color = "black", size = 6
+  )
+
+exponential_LAI_EVI_plot
+
+ggsave("EVIvsLAI_exp.png", exponential_LAI_EVI_plot, width = 7, height = 10, dpi = 350)
+
 
 # EVI vs CropHeight ------------------------------------------------------
 

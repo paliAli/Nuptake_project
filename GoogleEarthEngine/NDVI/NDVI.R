@@ -3,7 +3,7 @@ library(dplyr)
 
 setwd("C:\\Users\\pavla\\OneDrive\\Documents\\GitHub\\Nuptake_project\\GoogleEarthEngine\\NDVI")
 
-NDVI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDVI\\NDVI_scale10.csv")
+NDVI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\GitHub\\Nuptake_project\\GoogleEarthEngine\\NDVI\\NDVI_scale10.csv")
 NDVI <- NDVI %>% na.omit()
 
 NDVI$system.time_start <- as.Date(NDVI$system.time_start, format = "%b %d,%Y")
@@ -149,6 +149,50 @@ linear_LAI_NDVI_plot <- LAI_NDVI %>%
 linear_LAI_NDVI_plot
 
 ggsave("NDVIvsLAI(2).png", linear_LAI_NDVI_plot, width = 6, height = 10, dpi = 350)
+
+# Plot LAI vs NDVI (exponential)-----------------------------
+
+exponential_model <- lm(log(mean_LAI) ~ meanNDVI, data = LAI_NDVI)
+summary(exponential_model)
+
+# Extract coefficients
+exponential_coef <- coef(exponential_model)
+intercept_exp <- exponential_coef[1]
+slope_exp <- exponential_coef[2]
+
+r_squared_exp <- 1 - sum(residuals(exponential_model)^2) / sum((log(LAI_NDVI$mean_LAI) - mean(log(LAI_NDVI$mean_LAI)))^2)
+
+
+exponential_LAI_NDVI_plot <- LAI_NDVI %>%
+  ggplot(aes(x = meanNDVI, y = mean_LAI))+
+  geom_point(size = 3)+
+  geom_smooth(method = lm, se = FALSE, formula = y ~ exp(x), color = "blue", aes(group = 1))+
+  labs(x = "NDVI", y = "LAI", title = "NDVI vs LAI (exponential)")+
+  theme_minimal()+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 22),
+        legend.title = element_text(size = 14),
+        legend.text = element_text(size = 13))+
+  annotate(
+    "text",
+    x = min(LAI_NDVI$meanNDVI) + 0.02,
+    y = max(LAI_NDVI$mean_LAI) - 1,
+    label = paste(
+      "y = ",
+      "exp(",
+      format(slope_exp, digits = 2),
+      "*x +", format(exp(intercept_exp), digits = 2),
+      ")\nR2 =", round(r_squared_exp, 2)
+    ),
+    hjust = 0, vjust = 1, color = "black", size = 6
+  )
+
+exponential_LAI_NDVI_plot
+
+ggsave("NDVIvsLAI_exp.png", exponential_LAI_NDVI_plot, width = 7, height = 10, dpi = 350)
 
 
 # Plot CropHeight vs NDVI -------------------------------------------------
