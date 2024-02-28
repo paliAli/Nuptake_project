@@ -17,6 +17,8 @@ Nuptake_NDVI <- Nuptake_NDVI[-5,]
 #fit a regression model and use LOOCV to evaluate performance
 LOOCV_model <- train(log(mean_Nuptake) ~ meanNDVI, data = Nuptake_NDVI, method = "lm", trControl = ctrl)
 LOOCV_model
+coefficients <- coef(LOOCV_model$finalModel)
+print(coefficients)
 
 # Predict using LOOCV model
 predictions <- predict(LOOCV_model, newdata = Nuptake_NDVI, type = "raw")
@@ -26,8 +28,15 @@ print(predictions)
 #must do exp(predictions) to undo the logarithmic transformation and get true Nuptake values
 results_NDVI <- data.frame(Actual = Nuptake_NDVI$mean_Nuptake, Predicted = exp(predictions))
 
-# Calculate R-squared and RMSE
-r_squared <- cor(Nuptake_NDVI$mean_Nuptake, results_NDVI$Predicted)^2
+# Calculate R-squared on the original scale
+y_actual <- Nuptake_NDVI$mean_Nuptake
+y_predicted <- exp(predictions)
+
+ss_residual <- sum((y_actual - y_predicted)^2)
+ss_total <- sum((y_actual - mean(y_actual))^2)
+r_squared <- 1 - (ss_residual / ss_total)
+
+# Calculate RMSE
 rmse <- sqrt(mean((Nuptake_NDVI$mean_Nuptake - results_NDVI$Predicted)^2))
 
 # Scatter plot
@@ -61,6 +70,8 @@ Nuptake_NDVI_prediction
 
 ggsave("Nuptake_NDVI_prediction_no05-10-2022.png", Nuptake_NDVI_prediction, width = 7, height = 10, dpi = 350)
 
+getwd()
+
 # NDRE vs N uptake --------------------------------------------------------
 
 #without 2022/05/10
@@ -79,8 +90,15 @@ print(predictions)
 #must do exp(predictions) to undo the logarithmic transformation and get true Nuptake values
 results_NDRE <- data.frame(Actual = Nuptake_NDRE$mean_Nuptake, Predicted = exp(predictions))
 
-# Calculate R-squared and RMSE
-r_squared <- cor(Nuptake_NDRE$mean_Nuptake, results_NDRE$Predicted)^2
+# Calculate R-squared on the original scale
+y_actual <- Nuptake_NDRE$mean_Nuptake
+y_predicted <- exp(predictions)
+
+ss_residual <- sum((y_actual - y_predicted)^2)
+ss_total <- sum((y_actual - mean(y_actual))^2)
+r_squared <- 1 - (ss_residual / ss_total)
+
+# Calculate RMSE
 rmse <- sqrt(mean((Nuptake_NDRE$mean_Nuptake - results_NDRE$Predicted)^2))
 
 # Scatter plot
@@ -132,8 +150,15 @@ print(predictions)
 #must do exp(predictions) to undo the logarithmic transformation and get true Nuptake values
 results_MCARI <- data.frame(Actual = Nuptake_MCARI$mean_Nuptake, Predicted = exp(predictions))
 
-# Calculate R-squared and RMSE
-r_squared <- cor(Nuptake_MCARI$mean_Nuptake, results_MCARI$Predicted)^2
+# Calculate R-squared on the original scale
+y_actual <- Nuptake_MCARI$mean_Nuptake
+y_predicted <- exp(predictions)
+
+ss_residual <- sum((y_actual - y_predicted)^2)
+ss_total <- sum((y_actual - mean(y_actual))^2)
+r_squared <- 1 - (ss_residual / ss_total)
+
+# Calculate RMSE
 rmse <- sqrt(mean((Nuptake_MCARI$mean_Nuptake - results_MCARI$Predicted)^2))
 
 # Scatter plot
@@ -185,8 +210,15 @@ print(predictions)
 #must do exp(predictions) to undo the logarithmic transformation and get true Nuptake values
 results_EVI <- data.frame(Actual = Nuptake_EVI$mean_Nuptake, Predicted = exp(predictions))
 
-# Calculate R-squared and RMSE
-r_squared <- cor(Nuptake_EVI$mean_Nuptake, results_EVI$Predicted)^2
+# Calculate R-squared on the original scale
+y_actual <- Nuptake_EVI$mean_Nuptake
+y_predicted <- exp(predictions)
+
+ss_residual <- sum((y_actual - y_predicted)^2)
+ss_total <- sum((y_actual - mean(y_actual))^2)
+r_squared <- 1 - (ss_residual / ss_total)
+
+# Calculate RMSE
 rmse <- sqrt(mean((Nuptake_EVI$mean_Nuptake - results_EVI$Predicted)^2))
 
 # Scatter plot
