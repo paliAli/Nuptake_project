@@ -13,7 +13,7 @@ A linear relationship between vegetation indices and nitrogen uptake was used in
 ## Evaluation
 I plotted the predicted nitrogen uptake against the actual measure values and calculated the R^2 and RMSE.
 
-**R^2: Coefficient of determination indicating the proportion of the variance in the dependent variable that is predictable from the independent variable. \n
+**R^2: Coefficient of determination indicating the proportion of the variance in the dependent variable that is predictable from the independent variable. <br />
 RMSE: Root Mean Square Error representing the square root of the average squared differences between predicted and actual values.**
 
 The Caret package for R was used.
