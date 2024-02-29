@@ -11,7 +11,7 @@ LOOCV involves training the model on all data points except one and then validat
 A linear relationship between vegetation indices and nitrogen uptake was used in the model.
 
 ## Evaluation
-I plotted the predicted nitrogen uptake against the actual measure values and calculated the R^2 and RMSE.
+I plotted the predicted nitrogen uptake against the actual measure values and calculated the R^2 and RMSE. The plots can be found in the subfolder results.
 
 **R^2: Coefficient of determination indicating the proportion of the variance in the dependent variable that is predictable from the independent variable. <br />
 RMSE: Root Mean Square Error representing the square root of the average squared differences between predicted and actual values.**
