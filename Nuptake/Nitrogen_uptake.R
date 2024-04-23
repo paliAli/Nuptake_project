@@ -44,8 +44,6 @@ Nuptake_plot <- ggplot(mean_Nuptake, aes(date, mean_Nuptake, shape = factor(mate
 Nuptake_plot
 
 library(fuzzyjoin)
-library(lubridate)
-library (tidyr)
 library(dplyr)
 library(ggplot2)
 library(ggthemes)

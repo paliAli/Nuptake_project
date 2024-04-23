@@ -8,14 +8,13 @@ set.seed(123)
 #specify the cross-validation method
 ctrl <- trainControl(method = "LOOCV")
 
-
 # NDVI vs N uptake --------------------------------------------------------
 
 #without 2022/05/10
 Nuptake_NDVI <- Nuptake_NDVI[-5,]
 
 #fit a regression model and use LOOCV to evaluate performance
-LOOCV_model <- train(log(mean_Nuptake) ~ meanNDVI, data = Nuptake_NDVI, method = "lm", trControl = ctrl)
+LOOCV_model <- train(mean_Nuptake ~ meanNDVI, data = Nuptake_NDVI, method = "lm", trControl = ctrl)
 LOOCV_model
 coefficients <- coef(LOOCV_model$finalModel)
 print(coefficients)
@@ -26,11 +25,11 @@ print(predictions)
 
 # Create a data frame with actual and predicted values
 #must do exp(predictions) to undo the logarithmic transformation and get true Nuptake values
-results_NDVI <- data.frame(Actual = Nuptake_NDVI$mean_Nuptake, Predicted = exp(predictions))
+results_NDVI <- data.frame(Actual = Nuptake_NDVI$mean_Nuptake, Predicted = predictions)
 
 # Calculate R-squared on the original scale
 y_actual <- Nuptake_NDVI$mean_Nuptake
-y_predicted <- exp(predictions)
+y_predicted <- predictions
 
 ss_residual <- sum((y_actual - y_predicted)^2)
 ss_total <- sum((y_actual - mean(y_actual))^2)
@@ -79,7 +78,7 @@ Nuptake_NDRE <- Nuptake_NDRE[-5,]
 
 
 #fit a regression model and use LOOCV to evaluate performance
-LOOCV_model <- train(log(mean_Nuptake) ~ meanNDRE, data = Nuptake_NDRE, method = "lm", trControl = ctrl)
+LOOCV_model <- train(mean_Nuptake ~ meanNDRE, data = Nuptake_NDRE, method = "lm", trControl = ctrl)
 LOOCV_model
 
 # Predict using LOOCV model
@@ -88,11 +87,11 @@ print(predictions)
 
 # Create a data frame with actual and predicted values
 #must do exp(predictions) to undo the logarithmic transformation and get true Nuptake values
-results_NDRE <- data.frame(Actual = Nuptake_NDRE$mean_Nuptake, Predicted = exp(predictions))
+results_NDRE <- data.frame(Actual = Nuptake_NDRE$mean_Nuptake, Predicted = predictions)
 
 # Calculate R-squared on the original scale
 y_actual <- Nuptake_NDRE$mean_Nuptake
-y_predicted <- exp(predictions)
+y_predicted <- predictions
 
 ss_residual <- sum((y_actual - y_predicted)^2)
 ss_total <- sum((y_actual - mean(y_actual))^2)
@@ -139,7 +138,7 @@ Nuptake_MCARI <- Nuptake_MCARI[-5,]
 
 
 #fit a regression model and use LOOCV to evaluate performance
-LOOCV_model <- train(log(mean_Nuptake) ~ meanMCARI, data = Nuptake_MCARI, method = "lm", trControl = ctrl)
+LOOCV_model <- train(mean_Nuptake ~ meanMCARI, data = Nuptake_MCARI, method = "lm", trControl = ctrl)
 LOOCV_model
 
 # Predict using LOOCV model
@@ -148,11 +147,11 @@ print(predictions)
 
 # Create a data frame with actual and predicted values
 #must do exp(predictions) to undo the logarithmic transformation and get true Nuptake values
-results_MCARI <- data.frame(Actual = Nuptake_MCARI$mean_Nuptake, Predicted = exp(predictions))
+results_MCARI <- data.frame(Actual = Nuptake_MCARI$mean_Nuptake, Predicted = predictions)
 
 # Calculate R-squared on the original scale
 y_actual <- Nuptake_MCARI$mean_Nuptake
-y_predicted <- exp(predictions)
+y_predicted <- predictions
 
 ss_residual <- sum((y_actual - y_predicted)^2)
 ss_total <- sum((y_actual - mean(y_actual))^2)
@@ -199,7 +198,7 @@ Nuptake_EVI <- Nuptake_EVI[-5,]
 
 
 #fit a regression model and use LOOCV to evaluate performance
-LOOCV_model <- train(log(mean_Nuptake) ~ meanEVI, data = Nuptake_EVI, method = "lm", trControl = ctrl)
+LOOCV_model <- train(mean_Nuptake ~ meanEVI, data = Nuptake_EVI, method = "lm", trControl = ctrl)
 LOOCV_model
 
 # Predict using LOOCV model
@@ -208,11 +207,11 @@ print(predictions)
 
 # Create a data frame with actual and predicted values
 #must do exp(predictions) to undo the logarithmic transformation and get true Nuptake values
-results_EVI <- data.frame(Actual = Nuptake_EVI$mean_Nuptake, Predicted = exp(predictions))
+results_EVI <- data.frame(Actual = Nuptake_EVI$mean_Nuptake, Predicted = predictions)
 
 # Calculate R-squared on the original scale
 y_actual <- Nuptake_EVI$mean_Nuptake
-y_predicted <- exp(predictions)
+y_predicted <- predictions
 
 ss_residual <- sum((y_actual - y_predicted)^2)
 ss_total <- sum((y_actual - mean(y_actual))^2)
