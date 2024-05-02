@@ -12,15 +12,19 @@ NDVI <- NDVI %>%
 
 NDVI <- NDVI [which(NDVI$meanNDVI >= "0.1"), ]
 
+NDVI$material <- ifelse(NDVI$date <= as.Date("2022-10-06"), "grass", "winter wheat")
+
+NDVI <- NDVI [which(NDVI$date <= "2023-07-01"), ]
+  
 library(ggplot2)
 library(ggthemes) 
 
 # Timeseries plot ---------------------------------------------------------
 
 NDVI_plot <- ggplot(data = NDVI, aes(x = date, y = meanNDVI))+
-  geom_point(size =2, color = "darkgreen")+
-  geom_line()+
-  labs(title = "NDVI",
+  geom_line(linewidth = 1, alpha = 0.7)+
+  geom_point(size =3, aes(shape = factor(material), color = factor(material)))+
+  labs(title = "NDVI time series",
        x = "Date",
        y = "NDVI",) +
   theme_minimal() +
@@ -31,7 +35,12 @@ NDVI_plot <- ggplot(data = NDVI, aes(x = date, y = meanNDVI))+
         axis.text.y = element_text(size = 14),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         axis.title.x = element_text(size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 30))
+        plot.title = element_text (margin = margin (b = 20), size = 30))+
+  scale_shape_manual(values = c(16, 17)) +
+  scale_color_manual(values = c("green3", "gold2")) +
+  guides(shape = guide_legend(title = "Biomass type",
+                              keywidth = 1.5),
+         color = guide_legend(title = "Biomass type",))
 
 NDVI_plot
 
@@ -207,8 +216,9 @@ CropHeight_NDVI <- fuzzy_inner_join(mean_field_CropHeight, NDVI,
 
 
 CropHeight_NDVI <- CropHeight_NDVI [which(CropHeight_NDVI$Date <= "2023-06-01"), ]
+
 #remove values around the cuts on 2022-05-14, probably lower NDVI due to flowering
-CropHeight_NDVI <- CropHeight_NDVI [-5, ]
+#CropHeight_NDVI <- CropHeight_NDVI [-5, ]
 
 linear_model <- lm(`mean_height(cm)` ~ meanNDVI, data = CropHeight_NDVI)
 summary(linear_model)
@@ -258,6 +268,8 @@ Ncontent_NDVI <- Ncontent_NDVI[-11, ]
 Ncontent_NDVI <- Ncontent_NDVI%>%
   group_by(date.x)%>%
   summarise(mean_Ncontent = first(`%N corr.`), meanNDVI = first(meanNDVI))
+
+Ncontent_NDVI <- Ncontent_NDVI [which(Ncontent_NDVI$date.x <= "2023-06-01"), ]
 
 
 linear_model <- lm(mean_Ncontent ~ meanNDVI, data = Ncontent_NDVI)
@@ -309,6 +321,7 @@ biomass_NDVI<- biomass_NDVI %>%
   summarise(biomass_weight = first(`dry-tara`), meanNDVI = first(meanNDVI))%>%
   na.omit()
 
+biomass_NDVI <- biomass_NDVI [which(biomass_NDVI$date.x <= "2023-06-01"), ]
 
 linear_model <- lm(biomass_weight ~ meanNDVI, data = biomass_NDVI)
 summary(linear_model)

@@ -12,11 +12,16 @@ EVI$date <- as.Date(EVI$date, format = "%b %d,%Y")
 library(ggplot2)
 library(ggthemes)
 
+EVI <- EVI[which(EVI$meanEVI >= "0.1"),]
+
+EVI$material <- ifelse(EVI$date <= as.Date("2022-10-06"), "grass", "winter wheat")
+
+EVI <- EVI [which(EVI$date <= "2023-07-01"), ]
 
 EVI_plot <- ggplot(data = EVI, aes(x = date, y = meanEVI))+
-  geom_point(size =2, color = "darkgreen")+
-  geom_line()+
-  labs(title = "EVI",
+  geom_line(linewidth = 1, alpha = 0.7)+
+  geom_point(size =3, aes(shape = factor(material), color = factor(material)))+
+  labs(title = "EVI time series",
        x = "Date",
        y = "EVI",) +
   theme_minimal() +
@@ -27,7 +32,12 @@ EVI_plot <- ggplot(data = EVI, aes(x = date, y = meanEVI))+
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 30))
+        plot.title = element_text (margin = margin (b = 20), size = 30))+
+  scale_shape_manual(values = c(16, 17)) +
+  scale_color_manual(values = c("green3", "gold2")) +
+  guides(shape = guide_legend(title = "Biomass type",
+                              keywidth = 1.5),
+         color = guide_legend(title = "Biomass type",))
 
 EVI_plot
 
@@ -244,6 +254,8 @@ Ncontent_EVI <- Ncontent_EVI%>%
   group_by(date.x)%>%
   summarise(mean_Ncontent = first(`%N corr.`), meanEVI = first(meanEVI))
 
+Ncontent_EVI <- Ncontent_EVI [which(Ncontent_EVI$date.x <= "2023-06-01"), ]
+
 
 linear_model <- lm(mean_Ncontent ~ meanEVI, data = Ncontent_EVI)
 summary(linear_model)
@@ -294,6 +306,7 @@ biomass_EVI<- biomass_EVI %>%
   summarise(biomass_weight = first(`dry-tara`), meanEVI = first(meanEVI))%>%
   na.omit()
 
+biomass_EVI <- biomass_EVI [which(biomass_EVI$date.x <= "2023-06-01"), ]
 
 linear_model <- lm(biomass_weight ~ meanEVI, data = biomass_EVI)
 summary(linear_model)
@@ -316,7 +329,7 @@ biomass_EVI_plot <- biomass_EVI %>%
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate("text",
-           x = min(biomass_EVI$meanEVI) + 0.08, 
+           x = min(biomass_EVI$meanEVI) + 0.08, m
            y = max(biomass_EVI$biomass_weight) - 10,
            label = paste("y =", format(slope, digits = 2), 
                          "*x +", 

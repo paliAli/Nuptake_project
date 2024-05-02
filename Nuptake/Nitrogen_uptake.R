@@ -19,29 +19,35 @@ mean_Nuptake <- nitrogen_uptake %>%
   group_by(date) %>%
   summarize(`dry-tara` = mean(`dry-tara`), `%N corr.` = mean(`%N corr.`), mean_Nuptake = mean(Nitrogen_uptake_gperm2), material = first(Material))
 
+mean_Nuptake <- mean_Nuptake[which(mean_Nuptake$date <= "2023-07-15"),]
+
 mean_Nuptake <- mean_Nuptake %>%
   mutate(material = recode(material, 'aboveground biomass' = 'winter wheat'),
          material = recode(material, 'mix' = 'grass'))
 
 Nuptake_plot <- ggplot(mean_Nuptake, aes(date, mean_Nuptake, shape = factor(material), color = factor(material))) + 
   geom_line(linewidth = 1) + 
-  geom_point(size = 4)+
+  geom_point(size = 3)+
   ggtitle("Nitrogen uptake time series") + 
   xlab("date") + 
   ylab("N uptake (g/m2)")+
   theme_minimal()+
   scale_color_manual(values = index_colors, labels = index_labels) +
-  scale_x_date(date_labels = "%b/%Y", date_breaks = "2 months") +
-  theme(axis.text.x = element_text(size = 11, angle = 35),
-        axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 20))+
+  scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months") +
+  theme(axis.text.x = element_text(size = 12, angle = 35),
+        axis.text.y = element_text(size = 14),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15),
+        axis.title.x = element_text(size = 15),
+        plot.title = element_text (margin = margin (b = 20), size = 30))+
   scale_shape_manual(values = c(16, 17)) +
-  scale_color_manual(values = c("green3", "gold3")) +
+  scale_color_manual(values = c("green3", "gold2")) +
   guides(shape = guide_legend(title = "Biomass type",
                               keywidth = 1.5),
          color = guide_legend(title = "Biomass type",))
 
 Nuptake_plot
+
+ggsave("Nuptake_timeseries.png", Nuptake_plot, width = 10, height = 5, dpi = 350)
 
 library(fuzzyjoin)
 library(dplyr)
@@ -69,7 +75,7 @@ Nuptake_NDVI <- Nuptake_NDVI [-11, ]
 
 Nuptake_NDVI <- Nuptake_NDVI %>% 
     group_by(date.x)%>%
-    summarise(mean_Nuptake = first(mean_Nuptake), meanNDVI = first(meanNDVI), material = first(material))
+    summarise(mean_Nuptake = first(mean_Nuptake), meanNDVI = first(meanNDVI), material = first(material.x))
 
 
 #probably lower NDVI due to flowering
@@ -89,7 +95,7 @@ r_squared <- 1 - sum(residuals(linear_model)^2) / sum((Nuptake_NDVI$mean_Nuptake
 
 linear_Nuptake_NDVI_plot <- Nuptake_NDVI %>%
   ggplot(aes(x = meanNDVI, y = mean_Nuptake))+
-  geom_point()+
+  geom_point(size =3, aes(shape = factor(material), color = factor(material)))+
   geom_smooth(method = lm, se = FALSE)+
   labs(x = "NDVI", y = "N uptake (g/m2)", title = "NDVI vs N uptake")+
   theme_minimal()+
@@ -99,14 +105,19 @@ linear_Nuptake_NDVI_plot <- Nuptake_NDVI %>%
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate("text",
-           x = min(Nuptake_NDVI$meanNDVI) + 0.06, 
+           x = min(Nuptake_NDVI$meanNDVI) + 0.03, 
            y = max(Nuptake_NDVI$mean_Nuptake) - 0.9,
            label = paste("y =", format(slope, digits = 2), 
                          "*x +", 
                          format(intercept, digits = 2),
                          "\nR2 =", round(r_squared, 2),
                          "\nCorrelation:", round(cor(Nuptake_NDVI$meanNDVI, Nuptake_NDVI$mean_Nuptake), 2)),
-           hjust = 0, vjust = 1, color = "black", size = 6)
+           hjust = 0, vjust = 1, color = "black", size = 6)+
+    scale_shape_manual(values = c(16, 17)) +
+    scale_color_manual(values = c("green3", "gold2")) +
+    guides(shape = guide_legend(title = "Biomass type",
+                                keywidth = 1.5),
+           color = guide_legend(title = "Biomass type",))
 
 linear_Nuptake_NDVI_plot
 

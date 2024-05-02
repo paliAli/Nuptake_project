@@ -15,12 +15,16 @@ library(ggthemes)
 
 NDRE <- NDRE [which(NDRE$meanNDRE >= "0.1"), ]
 
+NDRE$material <- ifelse(NDRE$date <= as.Date("2022-10-06"), "grass", "winter wheat")
+
+NDRE <- NDRE [which(NDRE$date <= "2023-07-01"), ]
+
 # Timeseries plot ---------------------------------------------------------
 
 NDRE_plot <- ggplot(data = NDRE, aes(x = date, y = meanNDRE))+
-  geom_point(size =2, color = "darkgreen")+
-  geom_line()+
-  labs(title = "NDRE",
+  geom_line(linewidth = 1, alpha = 0.7)+
+  geom_point(size =3, aes(shape = factor(material), color = factor(material)))+
+  labs(title = "NDRE time series",
        x = "Date",
        y = "NDRE",) +
   theme_minimal() +
@@ -31,7 +35,12 @@ NDRE_plot <- ggplot(data = NDRE, aes(x = date, y = meanNDRE))+
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 30))
+        plot.title = element_text (margin = margin (b = 20), size = 30))+
+  scale_shape_manual(values = c(16, 17)) +
+  scale_color_manual(values = c("green3", "gold2")) +
+  guides(shape = guide_legend(title = "Biomass type",
+                              keywidth = 1.5),
+         color = guide_legend(title = "Biomass type",))
 
 NDRE_plot
 
@@ -206,6 +215,7 @@ Ncontent_NDRE <- Ncontent_NDRE%>%
   group_by(date.x)%>%
   summarise(mean_Ncontent = first(`%N corr.`), meanNDRE = first(meanNDRE))
 
+Ncontent_NDRE <- Ncontent_NDRE [which(Ncontent_NDRE$date.x <= "2023-06-01"), ]
 
 linear_model <- lm(mean_Ncontent ~ meanNDRE, data = Ncontent_NDRE)
 summary(linear_model)
@@ -256,6 +266,7 @@ biomass_NDRE<- biomass_NDRE %>%
   summarise(biomass_weight = first(`dry-tara`), meanNDRE = first(meanNDRE))%>%
   na.omit()
 
+biomass_NDRE <- biomass_NDRE [which(biomass_NDRE$date.x <= "2023-06-01"), ]
 
 linear_model <- lm(biomass_weight ~ meanNDRE, data = biomass_NDRE)
 summary(linear_model)

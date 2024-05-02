@@ -14,10 +14,14 @@ library(ggthemes)
 
 GNDVI <- GNDVI[which(GNDVI$meanGNDVI >= "0.1"),]
 
+GNDVI$material <- ifelse(GNDVI$date <= as.Date("2022-10-06"), "grass", "winter wheat")
+
+GNDVI <- GNDVI [which(GNDVI$date <= "2023-07-01"), ]
+
 GNDVI_plot <- ggplot(data = GNDVI, aes(x = date, y = meanGNDVI))+
-  geom_point(size =2, color = "darkgreen")+
-  geom_line()+
-  labs(title = "GNDVI",
+  geom_line(linewidth = 1, alpha = 0.7)+
+  geom_point(size =3, aes(shape = factor(material), color = factor(material)))+
+  labs(title = "GNDVI time series",
        x = "Date",
        y = "GNDVI",) +
   theme_minimal() +
@@ -28,11 +32,16 @@ GNDVI_plot <- ggplot(data = GNDVI, aes(x = date, y = meanGNDVI))+
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 30))
+        plot.title = element_text (margin = margin (b = 20), size = 30))+
+  scale_shape_manual(values = c(16, 17)) +
+  scale_color_manual(values = c("green3", "gold2")) +
+  guides(shape = guide_legend(title = "Biomass type",
+                              keywidth = 1.5),
+         color = guide_legend(title = "Biomass type",))
 
 GNDVI_plot
 
-ggsave("GNDVI_timeseries(1).png", GNDVI_plot, width = 10, height = 5, dpi = 350)
+ggsave("GNDVI_timeseries.png", GNDVI_plot, width = 10, height = 5, dpi = 350)
 
 # GNDVI for each quadrant --------------------------------------------------
 library(purrr)
@@ -148,7 +157,7 @@ CropHeight_GNDVI <- fuzzy_inner_join(mean_field_CropHeight, GNDVI,
   group_by(Date)%>%
   summarise(`mean_height(cm)` = first(`mean_height(cm)`), meanGNDVI = first(meanGNDVI))
 
-CropHeight_GNDVI <- CropHeight_GNDVI [-5, ]
+#CropHeight_GNDVI <- CropHeight_GNDVI [-5, ]
 CropHeight_GNDVI <- CropHeight_GNDVI [which(CropHeight_GNDVI$Date <= "2023-06-01"), ]
 
 linear_model <- lm(`mean_height(cm)` ~ meanGNDVI, data = CropHeight_GNDVI)
@@ -200,6 +209,7 @@ Ncontent_GNDVI <- Ncontent_GNDVI%>%
   group_by(date.x)%>%
   summarise(mean_Ncontent = first(`%N corr.`), meanGNDVI = first(meanGNDVI))
 
+Ncontent_GNDVI <- Ncontent_GNDVI [which(Ncontent_GNDVI$date.x <= "2023-06-01"), ]
 
 linear_model <- lm(mean_Ncontent ~ meanGNDVI, data = Ncontent_GNDVI)
 summary(linear_model)
@@ -251,6 +261,7 @@ biomass_GNDVI<- biomass_GNDVI %>%
   summarise(biomass_weight = first(`dry-tara`), meanGNDVI = first(meanGNDVI))%>%
   na.omit()
 
+biomass_GNDVI <- biomass_GNDVI [which(biomass_GNDVI$date.x <= "2023-06-01"), ]
 
 linear_model <- lm(biomass_weight ~ meanGNDVI, data = biomass_GNDVI)
 summary(linear_model)

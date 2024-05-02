@@ -13,10 +13,14 @@ library(ggthemes)
 
 MCARI <- MCARI [which(MCARI$meanMCARI >= 0.01), ]
 
+MCARI$material <- ifelse(MCARI$date <= as.Date("2022-10-06"), "grass", "winter wheat")
+
+MCARI <- MCARI [which(MCARI$date <= "2023-07-01"), ]
+
 MCARI_plot <- ggplot(data = MCARI, aes(x = date, y = meanMCARI))+
-  geom_point(size =2, color = "darkgreen")+
-  geom_line()+
-  labs(title = "MCARI",
+  geom_line(linewidth = 1, alpha = 0.7)+
+  geom_point(size =3, aes(shape = factor(material), color = factor(material)))+
+  labs(title = "MCARI time series",
        x = "Date",
        y = "MCARI",) +
   theme_minimal() +
@@ -27,11 +31,16 @@ MCARI_plot <- ggplot(data = MCARI, aes(x = date, y = meanMCARI))+
         axis.text.y = element_text(size = 14),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         axis.title.x = element_text(size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 30))
+        plot.title = element_text (margin = margin (b = 20), size = 30))+
+  scale_shape_manual(values = c(16, 17)) +
+  scale_color_manual(values = c("green3", "gold2")) +
+  guides(shape = guide_legend(title = "Biomass type",
+                              keywidth = 1.5),
+         color = guide_legend(title = "Biomass type",))
 
 MCARI_plot
 
-ggsave("MCARI_timeseries(1).png", MCARI_plot, width = 10, height = 5, dpi = 350)
+ggsave("MCARI_timeseries.png", MCARI_plot, width = 10, height = 5, dpi = 350)
 
 library(fuzzyjoin)
 
@@ -204,6 +213,8 @@ Ncontent_MCARI <- Ncontent_MCARI%>%
   group_by(date.x)%>%
   summarise(mean_Ncontent = first(`%N corr.`), meanMCARI = first(meanMCARI))
 
+Ncontent_MCARI <- Ncontent_MCARI [which(Ncontent_MCARI$date.x <= "2023-06-01"), ]
+
 linear_model <- lm(mean_Ncontent ~ meanMCARI, data = Ncontent_MCARI)
 summary(linear_model)
 
@@ -253,6 +264,7 @@ biomass_MCARI <- biomass_MCARI%>%
   summarise(biomass_weight = first(`dry-tara`), meanMCARI = first(meanMCARI))%>%
   na.omit()
 
+biomass_MCARI <- biomass_MCARI [which(biomass_MCARI$date.x <= "2023-06-01"), ]
 
 linear_model <- lm(biomass_weight ~ meanMCARI, data = biomass_MCARI)
 summary(linear_model)
