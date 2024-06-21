@@ -23,19 +23,21 @@ library(ggthemes)
 
 NDVI_plot <- ggplot(data = NDVI, aes(x = date, y = meanNDVI))+
   geom_line(linewidth = 1, alpha = 0.7)+
-  geom_point(size =3, aes(shape = factor(material), color = factor(material)))+
-  labs(title = "NDVI time series",
-       x = "Date",
+  geom_point(size =4, aes(shape = factor(material), color = factor(material)))+
+  labs(x = "Date",
        y = "NDVI",) +
   theme_minimal() +
   scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months")+
+  scale_y_continuous(breaks = seq(0.3, 0.9, by = 0.1)) +
   theme_minimal()+
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
         axis.text.y = element_text(size = 14),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         axis.title.x = element_text(size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 30))+
+        legend.text = element_text(size = 12),
+        legend.title = element_text(size = 14),
+        legend.position = "none")+ #tenhle radek odenda legendu
   scale_shape_manual(values = c(16, 17)) +
   scale_color_manual(values = c("green3", "gold2")) +
   guides(shape = guide_legend(title = "Biomass type",
@@ -44,7 +46,7 @@ NDVI_plot <- ggplot(data = NDVI, aes(x = date, y = meanNDVI))+
 
 NDVI_plot
 
-ggsave("NDVI_timeseries.png", NDVI_plot, width = 10, height = 5, dpi = 350)
+ggsave("NDVI_timeseries2.png", NDVI_plot, width = 10, height = 5, dpi = 350)
 
 # NDVI for each quadrant --------------------------------------------------
 
@@ -137,13 +139,12 @@ linear_LAI_NDVI_plot <- LAI_NDVI %>%
   ggplot(aes(x = meanNDVI, y = mean_LAI))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "NDVI", y = "LAI", title = "NDVI vs LAI")+
+  labs(x = "NDVI", y = "LAI")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(LAI_NDVI$meanNDVI) + 0.05, 
            y = max(LAI_NDVI$mean_LAI) - 0.5,
@@ -182,7 +183,6 @@ exponential_LAI_NDVI_plot <- LAI_NDVI %>%
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22),
         legend.title = element_text(size = 14),
         legend.text = element_text(size = 13))+
   annotate(
@@ -234,13 +234,12 @@ linear_NDVI_CH_plot <- CropHeight_NDVI %>%
   ggplot(aes(x = meanNDVI, y = `mean_height(cm)`))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "NDVI", y = "Crop height (cm)", title = "NDVI vs Crop height")+
+  labs(x = "NDVI", y = "Crop height (cm)")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(CropHeight_NDVI$meanNDVI) + 0.02, 
            y = max(CropHeight_NDVI$`mean_height(cm)`) - 20,
@@ -285,13 +284,12 @@ Ncontent_NDVI_plot <- Ncontent_NDVI %>%
   ggplot(aes(x = meanNDVI, y = mean_Ncontent))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "NDVI", y = "N content (%)", title = "NDVI vs N content")+
+  labs(x = "NDVI", y = "N content (%)")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(Ncontent_NDVI$meanNDVI) + 0.14, 
            y = max(Ncontent_NDVI$mean_Ncontent) - 0.3,
@@ -304,7 +302,7 @@ Ncontent_NDVI_plot <- Ncontent_NDVI %>%
 
 Ncontent_NDVI_plot
 
-ggsave("NDVIvsNcontent(1).png", Ncontent_NDVI_plot, width = 6, height = 10, dpi = 350)
+ggsave("NDVIvsNcontent.png", Ncontent_NDVI_plot, width = 6, height = 10, dpi = 350)
 
 # NDVI vs biomass weight --------------------------------------------------
 
@@ -336,13 +334,12 @@ biomass_NDVI_plot <- biomass_NDVI %>%
   ggplot(aes(x = meanNDVI, y = biomass_weight))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "NDVI", y = "biomass weight (g)", title = "NDVI vs biomass weight")+
+  labs(x = "NDVI", y = "biomass weight (g)")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(biomass_NDVI$meanNDVI) + 0.07, 
            y = max(biomass_NDVI$biomass_weight) - 7,

@@ -1,7 +1,7 @@
 library (data.table)
 library(dplyr)
 
-setwd("C:\\Users\\pavla\\OneDrive\\Documents\\GitHub\\Nuptake_project\\GoogleEarthEngine\\EVI")
+setwd("C:\\Users\\pavla\\OneDrive\\Documents\\GitHub\\Nuptake_project\\GoogleEarthEngine")
 EVI <- read.csv ("C:\\Users\\pavla\\OneDrive\\Documents\\GitHub\\Nuptake_project\\GoogleEarthEngine\\EVI\\EVI_scale10.csv")
 EVI <- EVI %>% na.omit() %>%
   rename(date = 'system.time_start')
@@ -17,22 +17,26 @@ EVI <- EVI[which(EVI$meanEVI >= "0.1"),]
 EVI$material <- ifelse(EVI$date <= as.Date("2022-10-06"), "grass", "winter wheat")
 
 EVI <- EVI [which(EVI$date <= "2023-07-01"), ]
+EVI <- EVI [which(EVI$date >= "2021-03-01"), ] #aby byl zacatek a konec vsech time series stejnej
 
-EVI_plot <- ggplot(data = EVI, aes(x = date, y = meanEVI))+
+
+ EVI_plot <- ggplot(data = EVI, aes(x = date, y = meanEVI))+
   geom_line(linewidth = 1, alpha = 0.7)+
-  geom_point(size =3, aes(shape = factor(material), color = factor(material)))+
-  labs(title = "EVI time series",
-       x = "Date",
+  geom_point(size =4, aes(shape = factor(material), color = factor(material)))+
+  labs(x = "Date",
        y = "EVI",) +
   theme_minimal() +
   scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months")+
+  scale_y_continuous(breaks = seq(0.3, 1.0, by = 0.1)) +
   theme_minimal()+
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 30))+
+        legend.text = element_text(size = 12),
+        legend.title = element_text(size = 14),
+        legend.position = "none")+
   scale_shape_manual(values = c(16, 17)) +
   scale_color_manual(values = c("green3", "gold2")) +
   guides(shape = guide_legend(title = "Biomass type",
@@ -41,7 +45,7 @@ EVI_plot <- ggplot(data = EVI, aes(x = date, y = meanEVI))+
 
 EVI_plot
 
-ggsave("EVI_timeseries.png", EVI_plot, width = 10, height = 5, dpi = 350)
+ggsave("EVI_timeseries2.png", EVI_plot, width = 10, height = 5, dpi = 350)
 
 # EVI for each quadrant --------------------------------------------------
 library(purrr)
@@ -126,13 +130,12 @@ linear_LAI_EVI_plot <- mean_LAI_EVI %>%
   ggplot(aes(x = meanEVI, y = mean_LAI))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "EVI", y = "LAI", title = "EVI vs LAI")+
+  labs(x = "EVI", y = "LAI")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(mean_LAI_EVI$meanEVI) + 0.02, 
            y = max(mean_LAI_EVI$mean_LAI) - 0.3,
@@ -145,7 +148,7 @@ linear_LAI_EVI_plot <- mean_LAI_EVI %>%
 
 linear_LAI_EVI_plot
 
-ggsave("EVIvsLAI.png", linear_LAI_EVI_plot, width = 6, height = 10, dpi = 350)
+ggsave("EVIvsLAI(2).png", linear_LAI_EVI_plot, width = 6, height = 10, dpi = 350)
 
 # EVI vs LAI (exponential) -------------------------------------------------------------
 
@@ -219,13 +222,12 @@ linear_CH_EVI_plot <- CropHeight_EVI %>%
   ggplot(aes(x = meanEVI, y = `mean_height(cm)`))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "EVI", y = "Crop height (cm)", title = "EVI vs Crop height")+
+  labs(x = "EVI", y = "Crop height (cm)")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(CropHeight_EVI$meanEVI) + 0.1, 
            y = max(CropHeight_EVI$`mean_height(cm)`) - 10,
@@ -270,13 +272,12 @@ Ncontent_EVI_plot <- Ncontent_EVI %>%
   ggplot(aes(x = meanEVI, y = mean_Ncontent))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "EVI", y = "N content (%)", title = "EVI vs N content")+
+  labs(x = "EVI", y = "N content (%)")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(Ncontent_EVI$meanEVI) + 0.25, 
            y = max(Ncontent_EVI$mean_Ncontent) - 0.3,
@@ -321,15 +322,14 @@ biomass_EVI_plot <- biomass_EVI %>%
   ggplot(aes(x = meanEVI, y = biomass_weight))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "EVI", y = "biomass weight (g)", title = "EVI vs biomass weight")+
+  labs(x = "EVI", y = "biomass weight (g)")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
-           x = min(biomass_EVI$meanEVI) + 0.08, m
+           x = min(biomass_EVI$meanEVI) + 0.08, 
            y = max(biomass_EVI$biomass_weight) - 10,
            label = paste("y =", format(slope, digits = 2), 
                          "*x +", 

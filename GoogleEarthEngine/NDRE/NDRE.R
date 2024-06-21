@@ -21,21 +21,24 @@ NDRE <- NDRE [which(NDRE$date <= "2023-07-01"), ]
 
 # Timeseries plot ---------------------------------------------------------
 
+
 NDRE_plot <- ggplot(data = NDRE, aes(x = date, y = meanNDRE))+
   geom_line(linewidth = 1, alpha = 0.7)+
-  geom_point(size =3, aes(shape = factor(material), color = factor(material)))+
-  labs(title = "NDRE time series",
-       x = "Date",
+  geom_point(size =4, aes(shape = factor(material), color = factor(material)))+
+  labs(x = "Date",
        y = "NDRE",) +
   theme_minimal() +
   scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months")+
+  scale_y_continuous(breaks = seq(0.3, 0.9, by = 0.1)) +
   theme_minimal()+
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 30))+
+        legend.text = element_text(size = 12),
+        legend.title = element_text(size = 14),
+        legend.position = "none")+
   scale_shape_manual(values = c(16, 17)) +
   scale_color_manual(values = c("green3", "gold2")) +
   guides(shape = guide_legend(title = "Biomass type",
@@ -44,10 +47,9 @@ NDRE_plot <- ggplot(data = NDRE, aes(x = date, y = meanNDRE))+
 
 NDRE_plot
 
-ggsave("NDRE_timeseries.png", NDRE_plot, width = 10, height = 5, dpi = 350)
+ggsave("NDRE_timeseries2.png", NDRE_plot, width = 10, height = 5, dpi = 350)
 
 # NDRE for each quadrant --------------------------------------------------
-library(purrr)
 
 # Get the list of CSV files
 file_list <- list.files(path = "C:\\Users\\pavla\\OneDrive\\Documents\\Nuptake_project\\Nuptake_final\\GoogleEarthEngine\\NDRE\\quadrants", pattern = "*.csv")
@@ -127,13 +129,12 @@ linear_LAI_NDRE_plot <- mean_LAI_NDRE %>%
   ggplot(aes(x = meanNDRE, y = mean_LAI))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "NDRE", y = "LAI", title = "NDRE vs LAI")+
+  labs(x = "NDRE", y = "LAI")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(mean_LAI_NDRE$meanNDRE) + 0.07, 
            y = max(mean_LAI_NDRE$mean_LAI) - 0.3,
@@ -146,7 +147,7 @@ linear_LAI_NDRE_plot <- mean_LAI_NDRE %>%
 
 linear_LAI_NDRE_plot
 
-ggsave("NDREvsLAI(2).png", linear_LAI_NDRE_plot, width = 6, height = 10, dpi = 350)
+ggsave("NDREvsLAI.png", linear_LAI_NDRE_plot, width = 6, height = 10, dpi = 350)
 
 # NDRE vs CropHeight ------------------------------------------------------
 
@@ -177,13 +178,12 @@ linear_CH_NDRE_plot <- CropHeight_NDRE %>%
   ggplot(aes(x = meanNDRE, y = `mean_height(cm)`))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "NDRE", y = "Crop height (cm)", title = "NDRE vs Crop height")+
+  labs(x = "NDRE", y = "Crop height (cm)")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(CropHeight_NDRE$meanNDRE) + 0.04, 
            y = max(CropHeight_NDRE$`mean_height(cm)`) - 10,
@@ -198,7 +198,7 @@ linear_CH_NDRE_plot <- CropHeight_NDRE %>%
 
 linear_CH_NDRE_plot
 
-ggsave("NDREvsCropHeight(1).png", linear_CH_NDRE_plot, width = 6, height = 10, dpi = 350)
+ggsave("NDREvsCropHeight.png", linear_CH_NDRE_plot, width = 6, height = 10, dpi = 350)
 
 
 # NDRE vs N content -----------------------------------------------------
@@ -230,13 +230,12 @@ Ncontent_NDRE_plot <- Ncontent_NDRE %>%
   ggplot(aes(x = meanNDRE, y = mean_Ncontent))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "NDRE", y = "N content (%)", title = "NDRE vs N content")+
+  labs(x = "NDRE", y = "N content (%)")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(Ncontent_NDRE$meanNDRE) + 0.15, 
            y = max(Ncontent_NDRE$mean_Ncontent) - 0.2,
@@ -249,7 +248,7 @@ Ncontent_NDRE_plot <- Ncontent_NDRE %>%
 
 Ncontent_NDRE_plot
 
-ggsave("NDREvsNcontent(1).png", Ncontent_NDRE_plot, width = 6, height = 10, dpi = 350)
+ggsave("NDREvsNcontent.png", Ncontent_NDRE_plot, width = 6, height = 10, dpi = 350)
 
 # NDRE vs biomass weight --------------------------------------------------
 
@@ -281,13 +280,12 @@ biomass_NDRE_plot <- biomass_NDRE %>%
   ggplot(aes(x = meanNDRE, y = biomass_weight))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "NDRE", y = "biomass weight (g)", title = "NDRE vs biomass weight")+
+  labs(x = "NDRE", y = "biomass weight (g)")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(biomass_NDRE$meanNDRE) + 0.03, 
            y = max(biomass_NDRE$biomass_weight) - 5,
@@ -300,4 +298,4 @@ biomass_NDRE_plot <- biomass_NDRE %>%
 
 biomass_NDRE_plot
 
-ggsave("NDREvsBiomass(1).png", biomass_NDRE_plot, width = 6, height = 10, dpi = 350)
+ggsave("NDREvsBiomass.png", biomass_NDRE_plot, width = 6, height = 10, dpi = 350)

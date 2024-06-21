@@ -38,6 +38,9 @@ r_squared <- 1 - (ss_residual / ss_total)
 # Calculate RMSE
 rmse <- sqrt(mean((Nuptake_NDVI$mean_Nuptake - results_NDVI$Predicted)^2))
 
+# Calculate MAE
+mae <- MAE(y_predicted, y_actual)
+
 # Scatter plot
 library(ggplot2)
 
@@ -45,29 +48,28 @@ Nuptake_NDVI_prediction <- results_NDVI %>%
   ggplot(aes(x = Actual, y = Predicted)) +
   geom_point(size = 3, ) +
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
-  labs(x = "Actual", y = "Predicted", title = "NDVI Actual vs. Predicted Values") +
+  labs(x = "Actual", y = "Predicted") +
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22),
-        legend.title = element_text(size = 14),
-        legend.text = element_text(size = 13))+
+        plot.title = element_text (margin = margin (b = 20), size = 22))+
   annotate(
     "text",
     x = min(results_NDVI$Actual)+1,
     y = max(results_NDVI$Predicted)-0.5,
     label = paste(
       "R² =", round(r_squared, 3),
-      "\nRMSE =", round(rmse, 3)
+      "\nRMSE =", round(rmse, 3),
+      "\nMAE =", round(mae, 3)
     ),
     hjust = 0, vjust = 1, color = "black", size = 6
   )
 
 Nuptake_NDVI_prediction
 
-ggsave("Nuptake_NDVI_prediction_no05-10-2022.png", Nuptake_NDVI_prediction, width = 7, height = 10, dpi = 350)
+ggsave("Nuptake_NDVI_prediction.png", Nuptake_NDVI_prediction, width = 7, height = 10, dpi = 350)
 
 getwd()
 
@@ -100,6 +102,9 @@ r_squared <- 1 - (ss_residual / ss_total)
 # Calculate RMSE
 rmse <- sqrt(mean((Nuptake_NDRE$mean_Nuptake - results_NDRE$Predicted)^2))
 
+# Calculate MAE
+mae <- MAE(y_predicted, y_actual)
+
 # Scatter plot
 library(ggplot2)
 
@@ -107,29 +112,27 @@ Nuptake_NDRE_prediction <- results_NDRE %>%
   ggplot(aes(x = Actual, y = Predicted)) +
   geom_point(size = 3, ) +
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
-  labs(x = "Actual", y = "Predicted", title = "NDRE Actual vs. Predicted Values") +
+  labs(x = "Actual", y = "Predicted") +
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22),
-        legend.title = element_text(size = 14),
-        legend.text = element_text(size = 13))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate(
     "text",
     x = min(results_NDRE$Actual)+1,
     y = max(results_NDRE$Predicted)-0.5,
     label = paste(
       "R² =", round(r_squared, 3),
-      "\nRMSE =", round(rmse, 3)
+      "\nRMSE =", round(rmse, 3),
+      "\nMAE =", round(mae, 3)
     ),
     hjust = 0, vjust = 1, color = "black", size = 6
   )
 
 Nuptake_NDRE_prediction
 
-ggsave("Nuptake_NDRE_prediction_no05-10-2022.png", Nuptake_NDRE_prediction, width = 7, height = 10, dpi = 350)
+ggsave("Nuptake_NDRE_prediction.png", Nuptake_NDRE_prediction, width = 7, height = 10, dpi = 350)
 
 # MCARI vs N uptake --------------------------------------------------------
 
@@ -160,6 +163,9 @@ r_squared <- 1 - (ss_residual / ss_total)
 # Calculate RMSE
 rmse <- sqrt(mean((Nuptake_MCARI$mean_Nuptake - results_MCARI$Predicted)^2))
 
+# Calculate MAE
+mae <- MAE(y_predicted, y_actual)
+
 # Scatter plot
 library(ggplot2)
 
@@ -167,29 +173,86 @@ Nuptake_MCARI_prediction <- results_MCARI %>%
   ggplot(aes(x = Actual, y = Predicted)) +
   geom_point(size = 3, ) +
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
-  labs(x = "Actual", y = "Predicted", title = "MCARI Actual vs. Predicted Values") +
+  labs(x = "Actual", y = "Predicted") +
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22),
-        legend.title = element_text(size = 14),
-        legend.text = element_text(size = 13))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate(
     "text",
     x = min(results_MCARI$Actual)+1,
     y = max(results_MCARI$Predicted)-0.5,
     label = paste(
       "R² =", round(r_squared, 3),
-      "\nRMSE =", round(rmse, 3)
+      "\nRMSE =", round(rmse, 3),
+      "\nMAE =", round(mae, 3)
     ),
     hjust = 0, vjust = 1, color = "black", size = 6
   )
 
 Nuptake_MCARI_prediction
 
-ggsave("Nuptake_MCARI_prediction_no05-10-2022.png", Nuptake_MCARI_prediction, width = 7, height = 10, dpi = 350)
+ggsave("Nuptake_MCARI_prediction.png", Nuptake_MCARI_prediction, width = 7, height = 10, dpi = 350)
+
+
+# GNDVI vs N uptake -------------------------------------------------------
+
+#fit a regression model and use LOOCV to evaluate performance
+LOOCV_model <- train(mean_Nuptake ~ meanGNDVI, data = Nuptake_GNDVI, method = "lm", trControl = ctrl)
+LOOCV_model
+
+# Predict using LOOCV model
+predictions <- predict(LOOCV_model, newdata = Nuptake_GNDVI, type = "raw")
+print(predictions)
+
+# Create a data frame with actual and predicted values
+#must do exp(predictions) to undo the logarithmic transformation and get true Nuptake values
+results_GNDVI <- data.frame(Actual = Nuptake_GNDVI$mean_Nuptake, Predicted = predictions)
+
+# Calculate R-squared on the original scale
+y_actual <- Nuptake_GNDVI$mean_Nuptake
+y_predicted <- predictions
+
+ss_residual <- sum((y_actual - y_predicted)^2)
+ss_total <- sum((y_actual - mean(y_actual))^2)
+r_squared <- 1 - (ss_residual / ss_total)
+
+# Calculate RMSE
+rmse <- sqrt(mean((Nuptake_GNDVI$mean_Nuptake - results_GNDVI$Predicted)^2))
+
+# Calculate MAE
+mae <- MAE(y_predicted, y_actual)
+
+# Scatter plot
+library(ggplot2)
+
+Nuptake_GNDVI_prediction <- results_GNDVI %>%
+  ggplot(aes(x = Actual, y = Predicted)) +
+  geom_point(size = 3, ) +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
+  labs(x = "Actual", y = "Predicted") +
+  theme_minimal()+
+  theme(axis.text.x = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.title.x = element_text(margin = margin(t = 20), size = 15),
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
+  annotate(
+    "text",
+    x = min(results_GNDVI$Actual)+1,
+    y = max(results_GNDVI$Predicted)-0.5,
+    label = paste(
+      "R² =", round(r_squared, 3),
+      "\nRMSE =", round(rmse, 3),
+      "\nMAE =", round(mae, 3)
+    ),
+    hjust = 0, vjust = 1, color = "black", size = 6
+  )
+
+Nuptake_GNDVI_prediction
+
+ggsave("Nuptake_GNDVI_prediction.png", Nuptake_GNDVI_prediction, width = 7, height = 10, dpi = 350)
+
 
 # EVI vs N uptake --------------------------------------------------------
 
@@ -220,6 +283,9 @@ r_squared <- 1 - (ss_residual / ss_total)
 # Calculate RMSE
 rmse <- sqrt(mean((Nuptake_EVI$mean_Nuptake - results_EVI$Predicted)^2))
 
+# Calculate MAE
+mae <- MAE(y_predicted, y_actual)
+
 # Scatter plot
 library(ggplot2)
 
@@ -227,26 +293,24 @@ Nuptake_EVI_prediction <- results_EVI %>%
   ggplot(aes(x = Actual, y = Predicted)) +
   geom_point(size = 3, ) +
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
-  labs(x = "Actual", y = "Predicted", title = "EVI Actual vs. Predicted Values") +
+  labs(x = "Actual", y = "Predicted") +
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22),
-        legend.title = element_text(size = 14),
-        legend.text = element_text(size = 13))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate(
     "text",
     x = min(results_EVI$Actual)+1,
     y = max(results_EVI$Predicted)-0.5,
     label = paste(
-      "R² =", round(r_squared, 3),
-      "\nRMSE =", round(rmse, 3)
+      "R² =", round(r_squared, 2),
+      "\nRMSE =", round(rmse, 2),
+      "\nMAE =", round(mae, 2)
     ),
     hjust = 0, vjust = 1, color = "black", size = 6
   )
 
 Nuptake_EVI_prediction
 
-ggsave("Nuptake_EVI_prediction_no05-10-2022.png", Nuptake_EVI_prediction, width = 7, height = 10, dpi = 350)
+ggsave("Nuptake_EVI_prediction.png", Nuptake_EVI_prediction, width = 6, height = 10, dpi = 350)

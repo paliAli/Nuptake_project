@@ -16,19 +16,21 @@ mean_Nuptake_q <- mean_Nuptake_q %>%
 Nuptake_q_plot <- ggplot(mean_Nuptake_q, aes(date, mean_Nuptake, color = factor(`quadrant (Q)`), shape = factor(material), group = factor(`quadrant (Q)`))) + 
   geom_line(linewidth = 1) + 
   geom_point(size = 3)+
-  ggtitle("Nitrogen uptake time series") + 
   xlab("date") + 
   ylab("N uptake (g/m2)")+
   theme_minimal()+
   scale_color_manual(values = index_colors, labels = index_labels) +
   scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months") +
+  scale_y_continuous(breaks = seq(0, 20, by = 4)) +
   scale_shape_manual(values = c(16, 17)) +
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
         axis.text.y = element_text(size = 14),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         axis.title.x = element_text(size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 30))+
+        plot.title = element_text (margin = margin (b = 20), size = 30),
+        legend.text = element_text(size = 12),
+        legend.title = element_text(size = 14))+
   guides(color = guide_legend(title = "Quadrant",
                               keywidth = 1.5),
          shape = guide_legend(title = "Biomass type",))

@@ -16,22 +16,25 @@ MCARI <- MCARI [which(MCARI$meanMCARI >= 0.01), ]
 MCARI$material <- ifelse(MCARI$date <= as.Date("2022-10-06"), "grass", "winter wheat")
 
 MCARI <- MCARI [which(MCARI$date <= "2023-07-01"), ]
+MCARI <- MCARI [which(MCARI$date >= "2021-03-01"), ]
 
 MCARI_plot <- ggplot(data = MCARI, aes(x = date, y = meanMCARI))+
   geom_line(linewidth = 1, alpha = 0.7)+
-  geom_point(size =3, aes(shape = factor(material), color = factor(material)))+
-  labs(title = "MCARI time series",
-       x = "Date",
+  geom_point(size =4, aes(shape = factor(material), color = factor(material)))+
+  labs(x = "Date",
        y = "MCARI",) +
   theme_minimal() +
   scale_x_date(date_labels = "%b/%Y", date_breaks = "3 months")+
+  scale_y_continuous(breaks = seq(0.1, 0.7, by = 0.1)) +
   theme_minimal()+
   theme(plot.margin = margin(8, 30, 5, 5),
         axis.text.x = element_text(size = 12, angle = 35),
         axis.text.y = element_text(size = 14),
         axis.title.y = element_text(margin = margin(r = 20), size = 15),
         axis.title.x = element_text(size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 30))+
+        legend.text = element_text(size = 12),
+        legend.title = element_text(size = 14),
+        legend.position = "none")+
   scale_shape_manual(values = c(16, 17)) +
   scale_color_manual(values = c("green3", "gold2")) +
   guides(shape = guide_legend(title = "Biomass type",
@@ -40,7 +43,7 @@ MCARI_plot <- ggplot(data = MCARI, aes(x = date, y = meanMCARI))+
 
 MCARI_plot
 
-ggsave("MCARI_timeseries.png", MCARI_plot, width = 10, height = 5, dpi = 350)
+ggsave("MCARI_timeseries2.png", MCARI_plot, width = 10, height = 5, dpi = 350)
 
 library(fuzzyjoin)
 
@@ -129,13 +132,12 @@ linear_LAI_MCARI_plot <- mean_LAI_MCARI %>%
   ggplot(aes(x = meanMCARI, y = mean_LAI))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "MCARI", y = "LAI", title = "MCARI vs LAI")+
+  labs(x = "MCARI", y = "LAI")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(mean_LAI_MCARI$meanMCARI) + 0.08, 
            y = max(mean_LAI_MCARI$mean_LAI),
@@ -177,13 +179,12 @@ linear_CH_MCARI_plot <- CropHeight_MCARI %>%
   ggplot(aes(x = meanMCARI, y = `mean_height(cm)`))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "MCARI", y = "Crop height (cm)", title = "MCARI vs Crop height")+
+  labs(x = "MCARI", y = "Crop height (cm)")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(CropHeight_MCARI$meanMCARI) + 0.005, 
            y = max(CropHeight_MCARI$`mean_height(cm)`) - 10,
@@ -228,13 +229,12 @@ Ncontent_MCARI_plot <- Ncontent_MCARI %>%
   ggplot(aes(x = meanMCARI, y = mean_Ncontent))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "MCARI", y = "N content (%)", title = "MCARI vs N content")+
+  labs(x = "MCARI", y = "N content (%)")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(Ncontent_MCARI$meanMCARI) + 0.12, 
            y = max(Ncontent_MCARI$mean_Ncontent) - 0.1,
@@ -279,13 +279,12 @@ biomass_MCARI_plot <- biomass_MCARI %>%
   ggplot(aes(x = meanMCARI, y = biomass_weight))+
   geom_point()+
   geom_smooth(method = lm, se = FALSE)+
-  labs(x = "MCARI", y = "biomass weight (g)", title = "MCARI vs biomass weight")+
+  labs(x = "MCARI", y = "biomass weight (g)")+
   theme_minimal()+
   theme(axis.text.x = element_text(size = 14),
         axis.text.y = element_text(size = 14),
         axis.title.x = element_text(margin = margin(t = 20), size = 15),
-        axis.title.y = element_text(margin = margin(r = 20), size = 15),
-        plot.title = element_text (margin = margin (b = 20), size = 22))+
+        axis.title.y = element_text(margin = margin(r = 20), size = 15))+
   annotate("text",
            x = min(biomass_MCARI$meanMCARI) + 0.1, 
            y = max(biomass_MCARI$biomass_weight) - 3,
